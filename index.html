@@ -175,8 +175,8 @@
           <option value="2026-11">Noviembre 2026</option>
           <option value="2026-12">Diciembre 2026</option>
         </select>
-        <input type="date" id="ff" onchange="rT()"/><select id="ft" onchange="rT()"><option value="CL">CL</option><option value="CILT">CILT</option></select><select id="fl" onchange="rT()"><option value="">Todas las lineas</option><option value="Boato 1">Boato 1</option><option value="Boato 2">Boato 2</option><option value="Marchesini">Marchesini</option></select><select id="ftu" onchange="rT()"><option value="">Todos los turnos</option><option>TM — Manana (06:00 - 14:00)</option><option>TT — Tarde (14:00 - 22:00)</option><option>TN — Noche (22:00 - 06:00)</option></select></div>
-      <div class="tw"><table><thead id="sup-thead"><tr><th>Fecha</th><th>Turno</th><th>Linea</th><th>Operador</th><th>N</th><th>Punto</th><th>Ref</th><th>Valor</th><th>Estado</th><th>Obs</th><th>Hora</th></tr></thead><tbody id="stb"><tr><td colspan="12" class="lm">Presiona Actualizar.</td></tr></tbody></table></div>
+        <input type="date" id="ff" onchange="rT()"/><select id="ft" onchange="rT()"><option value="">CL y CILT</option><option value="CL">Solo CL</option><option value="CILT">Solo CILT</option></select><select id="fl" onchange="rT()"><option value="">Todas las lineas</option><option value="Boato 1">Boato 1</option><option value="Boato 2">Boato 2</option><option value="Marchesini">Marchesini</option></select><select id="ftu" onchange="rT()"><option value="">Todos los turnos</option><option>TM — Manana (06:00 - 14:00)</option><option>TT — Tarde (14:00 - 22:00)</option><option>TN — Noche (22:00 - 06:00)</option></select></div>
+      <div class="tw"><table><thead><tr><th>Tipo</th><th>Fecha</th><th>Turno</th><th>Linea</th><th>Operador</th><th>N</th><th>Punto</th><th>Ref</th><th>Valor</th><th>Estado</th><th>Obs</th><th>Hora</th></tr></thead><tbody id="stb"><tr><td colspan="12" class="lm">Presiona Actualizar.</td></tr></tbody></table></div>
     </div>
   </div>
 </div>
@@ -266,14 +266,6 @@ function loadD(){
     });
 }
 function rT(){var ff=document.getElementById('ff').value,ft=document.getElementById('ft').value,fl=document.getElementById('fl').value,ftu=document.getElementById('ftu').value;var fm=document.getElementById('fmes').value;
-  var ft2=document.getElementById('ft').value;
-  // Update headers based on type
-  var thead=document.getElementById('sup-thead');
-  if(ft2==='CILT'){
-    thead.innerHTML='<tr><th>Fecha</th><th>Turno</th><th>Linea</th><th>Operador</th><th>N</th><th>Tarea</th><th>Estado</th><th>Obs</th><th>Hora</th></tr>';
-  } else {
-    thead.innerHTML='<tr><th>Fecha</th><th>Turno</th><th>Linea</th><th>Operador</th><th>N</th><th>Punto</th><th>Ref</th><th>Valor</th><th>Estado</th><th>Obs</th><th>Hora</th></tr>';
-  }
   var fr=AR.slice().sort(function(a,b){return String(b[1]).localeCompare(String(a[1]));}).filter(function(r){
     var fechaOk=true;
     if(fm){
@@ -294,14 +286,8 @@ function rT(){var ff=document.getElementById('ff').value,ft=document.getElementB
     return fechaOk&&(!ff||r[1]==ff)&&(!ft||r[0]==ft)&&(!fl||r[3].indexOf(fl)===0)&&(!ftu||r[2]==ftu);
   });var ok=fr.filter(function(r){return r[9]==='OK'||r[9]==='HECHO';}).length,nk=fr.filter(function(r){return r[9]==='NO OK'||r[9]==='NO HECHO';}).length,p=(ok+nk)>0?Math.round(ok/(ok+nk)*100):0;document.getElementById('kt').textContent=fr.length;document.getElementById('ko').textContent=ok;document.getElementById('kn').textContent=nk;document.getElementById('kp').textContent=(ok+nk)>0?p+'%':'—';var tb=document.getElementById('stb');if(!fr.length){tb.innerHTML='<tr><td colspan="12" class="em">No hay registros.</td></tr>';return;}tb.innerHTML=fr.map(function(r){var rs=r[9],pl=rs==='OK'||rs==='HECHO'?'<span class="pi pok">'+rs+'</span>':rs==='NO OK'||rs==='NO HECHO'?'<span class="pi pnk">'+rs+'</span>':'<span class="pi pnd">—</span>';var tp=r[0]==='CL'?'<span class="bg1">CL</span>':'<span class="bg3">CILT</span>';var fecha=String(r[1]||'').substring(0,10);
     var turno=String(r[2]||'').split(' ')[0];
-    var ft3=document.getElementById('ft').value;
-    var rowHtml;
-    if(ft3==='CILT'){
-      rowHtml='<tr><td>'+fecha+'</td><td>'+turno+'</td><td>'+(r[3]||'')+'</td><td>'+(r[4]||'')+'</td><td class="mo">'+(r[5]||'')+'</td><td>'+(r[6]||'')+'</td><td>'+pl+'</td><td>'+(r[10]||'')+'</td><td class="mo">'+(r[11]||'')+'</td></tr>';
-    } else {
-      rowHtml='<tr><td>'+fecha+'</td><td>'+turno+'</td><td>'+(r[3]||'')+'</td><td>'+(r[4]||'')+'</td><td class="mo">'+(r[5]||'')+'</td><td>'+(r[6]||'')+'</td><td class="mo">'+(r[7]||'')+'</td><td class="mo">'+(r[8]||'')+'</td><td>'+pl+'</td><td>'+(r[10]||'')+'</td><td class="mo">'+(r[11]||'')+'</td></tr>';
-    }
-    return rowHtml;}).join('');}
+    var tipo=r[0]==='CL'?'<span class="bg1">CL</span>':'<span class="bg3">CILT</span>';
+    return'<tr><td>'+tipo+'</td><td>'+fecha+'</td><td>'+turno+'</td><td>'+(r[3]||'')+'</td><td>'+(r[4]||'')+'</td><td class="mo">'+(r[5]||'')+'</td><td>'+(r[6]||'')+'</td><td class="mo">'+(r[7]||'')+'</td><td class="mo">'+(r[8]||'')+'</td><td>'+pl+'</td><td>'+(r[10]||'')+'</td><td class="mo">'+(r[11]||'')+'</td></tr>';}).join('');}
 function expXL(){var ff=document.getElementById('ff').value,ft=document.getElementById('ft').value,fl=document.getElementById('fl').value,ftu=document.getElementById('ftu').value;var fm=document.getElementById('fmes').value;
   var fr=AR.filter(function(r){
     var fechaOk=true;
