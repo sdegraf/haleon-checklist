@@ -129,7 +129,7 @@
     <div class="cd"><div class="ct">Datos del turno</div>
       <div class="fg">
         <div class="fi"><label>Linea de produccion</label><select id="cll" onchange="onLC()"><option value="">Seleccionar linea</option><option value="boato1">Boato 1 — Empaque Secundario</option><option value="boato2">Boato 2 — Empaque Secundario</option><option value="marchesini">Marchesini — Empaque Secundario</option></select></div>
-        <div class="fi" id="sf2" style="display:none"><label>SKU</label><select id="sk" onchange="onSC()"><option value="">Seleccionar SKU</option><option value="x12">x12</option><option value="x30">x30</option><option value="x50">x50</option></select></div>
+        <div class="fi" id="sf2" style="display:none"><label>SKU</label><select id="sk" onchange="onSC()"><option value="">Seleccionar SKU</option></select></div>
         <div class="fi"><label>Turno</label><select id="clt"><option value="">Seleccionar turno</option><option>TM — Manana (06:00 - 14:00)</option><option>TT — Tarde (14:00 - 22:00)</option><option>TN — Noche (22:00 - 06:00)</option></select></div>
         <div class="fi"><label>Fecha</label><input type="date" id="clf"/></div>
       </div>
@@ -175,8 +175,8 @@
           <option value="2026-11">Noviembre 2026</option>
           <option value="2026-12">Diciembre 2026</option>
         </select>
-        <input type="date" id="ff" onchange="rT()"/><select id="ft" onchange="rT()"><option value="">CL y CILT</option><option value="CL">Solo CL</option><option value="CILT">Solo CILT</option></select><select id="fl" onchange="rT()"><option value="">Todas las lineas</option><option value="Boato 1">Boato 1</option><option value="Boato 2">Boato 2</option><option value="Marchesini">Marchesini</option></select><select id="ftu" onchange="rT()"><option value="">Todos los turnos</option><option>TM — Manana (06:00 - 14:00)</option><option>TT — Tarde (14:00 - 22:00)</option><option>TN — Noche (22:00 - 06:00)</option></select></div>
-      <div class="tw"><table><thead><tr><th>Tipo</th><th>Fecha</th><th>Turno</th><th>Linea</th><th>Operador</th><th>N</th><th>Punto</th><th>Ref</th><th>Valor</th><th>Estado</th><th>Obs</th><th>Hora</th></tr></thead><tbody id="stb"><tr><td colspan="12" class="lm">Presiona Actualizar.</td></tr></tbody></table></div>
+        <input type="date" id="ff" onchange="rT()"/><select id="ft" onchange="rT()"><option value="CL">CL</option><option value="CILT">CILT</option></select><select id="fl" onchange="rT()"><option value="">Todas las lineas</option><option value="Boato 1">Boato 1</option><option value="Boato 2">Boato 2</option><option value="Marchesini">Marchesini</option></select><select id="ftu" onchange="rT()"><option value="">Todos los turnos</option><option>TM — Manana (06:00 - 14:00)</option><option>TT — Tarde (14:00 - 22:00)</option><option>TN — Noche (22:00 - 06:00)</option></select></div>
+      <div class="tw"><table><thead id="sup-thead"><tr><th>Fecha</th><th>Turno</th><th>Linea</th><th>Operador</th><th>N</th><th>Punto</th><th>Ref</th><th>Valor</th><th>Estado</th><th>Obs</th><th>Hora</th></tr></thead><tbody id="stb"><tr><td colspan="12" class="lm">Presiona Actualizar.</td></tr></tbody></table></div>
     </div>
   </div>
 </div>
@@ -226,11 +226,20 @@ var CILT=[
 {n:19,eq:'Final de linea',nm:'Cerradora y codificador de cajas',ds:'Verificar que los rodillos no tengan cinta adherida. Verificar que el codificador no pierda tinta. Limpiar cabezal.'},
 {n:20,eq:'Final de linea',nm:'Aparejo neumatico (elevador de cajas)',ds:'Verificar que las ventosas no presenten rajaduras. Verificar posicion correcta para la caja. Comprobar funcionamiento.'}
 ];
-function goTo(v){['hv','cl-view','cilt-view'].forEach(function(x){document.getElementById(x).style.display='none';});document.getElementById(v+'-view').style.display='block';document.getElementById('bi').style.display='inline-block';document.getElementById('bsv').style.display='inline-block';CV=v;document.getElementById('ht').textContent=v=='cl'?'Centerline':'CILT Diario';if(v=='cl')document.getElementById('clf').valueAsDate=new Date();if(v=='cilt'){document.getElementById('citf').valueAsDate=new Date();rCILT();}}
-function goHome(){['cl-view','cilt-view'].forEach(function(x){document.getElementById(x).classList.remove('ac');});document.getElementById('sv').style.display='none';document.getElementById('hv').style.display='block';document.getElementById('bsv').style.display='none';document.getElementById('bi').style.display='none';document.getElementById('ht').textContent='Mantenimiento Autonomo';CV='home';}
+function goTo(v){window.scrollTo({top:0,behavior:'instant'});document.body.scrollTop=0;document.documentElement.scrollTop=0;['hv','cl-view','cilt-view'].forEach(function(x){document.getElementById(x).style.display='none';});document.getElementById(v+'-view').style.display='block';document.getElementById('bi').style.display='inline-block';document.getElementById('bsv').style.display='inline-block';CV=v;document.getElementById('ht').textContent=v=='cl'?'Centerline':'CILT Diario';if(v=='cl')document.getElementById('clf').valueAsDate=new Date();if(v=='cilt'){document.getElementById('citf').valueAsDate=new Date();rCILT();}}
+function goHome(){window.scrollTo({top:0,behavior:'instant'});document.body.scrollTop=0;document.documentElement.scrollTop=0;['cl-view','cilt-view'].forEach(function(x){document.getElementById(x).classList.remove('ac');});document.getElementById('sv').style.display='none';document.getElementById('hv').style.display='block';document.getElementById('bsv').style.display='none';document.getElementById('bi').style.display='none';document.getElementById('ht').textContent='Mantenimiento Autonomo';CV='home';}
 function showSup(){['hv','cl-view','cilt-view'].forEach(function(x){document.getElementById(x).style.display='none';});document.getElementById('sv').style.display='block';loadD();}
 function hideSup(){document.getElementById('sv').style.display='none';if(CV=='home'){document.getElementById('hv').style.display='block';document.getElementById('bsv').style.display='none';document.getElementById('bi').style.display='none';document.getElementById('ht').textContent='Mantenimiento Autonomo';}else document.getElementById(CV+'-view').style.display='block';}
-function onLC(){var l=document.getElementById('cll').value;CV2={};document.getElementById('sf2').style.display=(l=='boato1'||l=='marchesini')?'':'none';document.getElementById('sk').value='';document.getElementById('cll3').innerHTML='';if(l=='boato2'){CI=LN.boato2.it;CL=LN.boato2.lb;document.getElementById('clbl').textContent='Boato 2';document.getElementById('clbp').textContent=CI.length+' puntos';rCL();}else{CI=[];document.getElementById('clbl').textContent=l?LN[l].lb:'Seleccionar linea';document.getElementById('clbp').textContent='— puntos';document.getElementById('cll2').textContent=l?'Selecciona el SKU':'Selecciona una linea';}uCP();}
+function onLC(){var l=document.getElementById('cll').value;CV2={};document.getElementById('sf2').style.display=(l=='boato1'||l=='marchesini')?'':'none';document.getElementById('sk').value='';
+  var skSel=document.getElementById('sk');
+  skSel.innerHTML='<option value="">Seleccionar SKU</option>';
+  if(l&&LN[l]&&LN[l].sk){
+    Object.keys(LN[l].sk).forEach(function(k){
+      var opt=document.createElement('option');
+      opt.value=k;opt.textContent=k;
+      skSel.appendChild(opt);
+    });
+  }document.getElementById('cll3').innerHTML='';if(l=='boato2'){CI=LN.boato2.it;CL=LN.boato2.lb;document.getElementById('clbl').textContent='Boato 2';document.getElementById('clbp').textContent=CI.length+' puntos';rCL();}else{CI=[];document.getElementById('clbl').textContent=l?LN[l].lb:'Seleccionar linea';document.getElementById('clbp').textContent='— puntos';document.getElementById('cll2').textContent=l?'Selecciona el SKU':'Selecciona una linea';}uCP();}
 function onSC(){var s=document.getElementById('sk').value,l=document.getElementById('cll').value;CV2={};if(!s||!l){document.getElementById('cll3').innerHTML='';return;}var sd=LN[l].sk[s];CI=sd.it;CL=sd.lb;document.getElementById('clbp').textContent=CI.length+' puntos';document.getElementById('clbl').textContent=CL;rCL();}
 function chk(i,v){var r=CI[i].r;if(!r)return'nd';var nv=parseFloat(v.replace(',','.')),nr=parseFloat(r);if(isNaN(nv))return'nd';return Math.abs(nv-nr)/nr<=TOL?'ok':'nok';}
 function rCL(){var c=document.getElementById('cll3');c.innerHTML='';for(var i=0;i<CI.length;i++){var it=CI[i],iC=it.r===null,row=document.createElement('div');row.className='cr';row.id='cr'+i;var ct=iC?'<select class="vs" id="cv'+i+'" data-i="'+i+'" onchange="sCS(this)"><option value="">Seleccionar</option><option value="OK">OK</option><option value="NO OK">NO OK</option></select>':'<input class="vi" type="text" id="cv'+i+'" data-i="'+i+'" placeholder="Valor" oninput="sCV(this)"/>';row.innerHTML='<span class="cn2">'+it.n+'</span><div class="ci2"><div class="cn3">'+it.nm+'</div><div class="cr2">Ref: <strong>'+it.d+'</strong></div></div><div class="cw">'+ct+'<span class="sl em" id="cl'+i+'">'+(iC?'seleccionar':'valor medido')+'</span></div>';c.appendChild(row);}uCP();}
@@ -257,7 +266,15 @@ function loadD(){
     });
 }
 function rT(){var ff=document.getElementById('ff').value,ft=document.getElementById('ft').value,fl=document.getElementById('fl').value,ftu=document.getElementById('ftu').value;var fm=document.getElementById('fmes').value;
-  var fr=AR.filter(function(r){
+  var ft2=document.getElementById('ft').value;
+  // Update headers based on type
+  var thead=document.getElementById('sup-thead');
+  if(ft2==='CILT'){
+    thead.innerHTML='<tr><th>Fecha</th><th>Turno</th><th>Linea</th><th>Operador</th><th>N</th><th>Tarea</th><th>Estado</th><th>Obs</th><th>Hora</th></tr>';
+  } else {
+    thead.innerHTML='<tr><th>Fecha</th><th>Turno</th><th>Linea</th><th>Operador</th><th>N</th><th>Punto</th><th>Ref</th><th>Valor</th><th>Estado</th><th>Obs</th><th>Hora</th></tr>';
+  }
+  var fr=AR.slice().sort(function(a,b){return String(b[1]).localeCompare(String(a[1]));}).filter(function(r){
     var fechaOk=true;
     if(fm){
       var d=r[1]?String(r[1]):'';
@@ -277,7 +294,14 @@ function rT(){var ff=document.getElementById('ff').value,ft=document.getElementB
     return fechaOk&&(!ff||r[1]==ff)&&(!ft||r[0]==ft)&&(!fl||r[3].indexOf(fl)===0)&&(!ftu||r[2]==ftu);
   });var ok=fr.filter(function(r){return r[9]==='OK'||r[9]==='HECHO';}).length,nk=fr.filter(function(r){return r[9]==='NO OK'||r[9]==='NO HECHO';}).length,p=(ok+nk)>0?Math.round(ok/(ok+nk)*100):0;document.getElementById('kt').textContent=fr.length;document.getElementById('ko').textContent=ok;document.getElementById('kn').textContent=nk;document.getElementById('kp').textContent=(ok+nk)>0?p+'%':'—';var tb=document.getElementById('stb');if(!fr.length){tb.innerHTML='<tr><td colspan="12" class="em">No hay registros.</td></tr>';return;}tb.innerHTML=fr.map(function(r){var rs=r[9],pl=rs==='OK'||rs==='HECHO'?'<span class="pi pok">'+rs+'</span>':rs==='NO OK'||rs==='NO HECHO'?'<span class="pi pnk">'+rs+'</span>':'<span class="pi pnd">—</span>';var tp=r[0]==='CL'?'<span class="bg1">CL</span>':'<span class="bg3">CILT</span>';var fecha=String(r[1]||'').substring(0,10);
     var turno=String(r[2]||'').split(' ')[0];
-    return'<tr><td>'+tp+'</td><td>'+fecha+'</td><td>'+turno+'</td><td>'+(r[3]||'')+'</td><td>'+(r[4]||'')+'</td><td class="mo">'+(r[5]||'')+'</td><td>'+(r[6]||'')+'</td><td class="mo">'+(r[7]||'')+'</td><td class="mo">'+(r[8]||'')+'</td><td>'+pl+'</td><td>'+(r[10]||'')+'</td><td class="mo">'+(r[11]||'')+'</td></tr>';}).join('');}
+    var ft3=document.getElementById('ft').value;
+    var rowHtml;
+    if(ft3==='CILT'){
+      rowHtml='<tr><td>'+fecha+'</td><td>'+turno+'</td><td>'+(r[3]||'')+'</td><td>'+(r[4]||'')+'</td><td class="mo">'+(r[5]||'')+'</td><td>'+(r[6]||'')+'</td><td>'+pl+'</td><td>'+(r[10]||'')+'</td><td class="mo">'+(r[11]||'')+'</td></tr>';
+    } else {
+      rowHtml='<tr><td>'+fecha+'</td><td>'+turno+'</td><td>'+(r[3]||'')+'</td><td>'+(r[4]||'')+'</td><td class="mo">'+(r[5]||'')+'</td><td>'+(r[6]||'')+'</td><td class="mo">'+(r[7]||'')+'</td><td class="mo">'+(r[8]||'')+'</td><td>'+pl+'</td><td>'+(r[10]||'')+'</td><td class="mo">'+(r[11]||'')+'</td></tr>';
+    }
+    return rowHtml;}).join('');}
 function expXL(){var ff=document.getElementById('ff').value,ft=document.getElementById('ft').value,fl=document.getElementById('fl').value,ftu=document.getElementById('ftu').value;var fm=document.getElementById('fmes').value;
   var fr=AR.filter(function(r){
     var fechaOk=true;
