@@ -143,7 +143,18 @@
   <div class="cn">
     <div class="cd"><div class="ct">Datos del turno</div>
       <div class="fg">
-        <div class="fi"><label>Linea</label><select id="citl"><option value="boato1">Boato 1 — Empaque Secundario</option></select></div>
+        <div class="fi"><label>Linea</label><select id="cilt-linea" onchange="onCILTLineaChange()">
+            <option value="">Seleccionar linea</option>
+            <option value="boato1sec">Boato 1 — Empaque Secundario</option>
+            <option value="boato1prim">Boato 1 — Empaque Primario</option>
+          </select></div>
+        <div class="fi" id="cilt-frec-field" style="display:none"><label>Frecuencia</label>
+          <select id="cilt-frec" onchange="onCILTFrecChange()">
+            <option value="">Seleccionar frecuencia</option>
+            <option value="diario">Diario</option>
+            <option value="semanal">Semanal</option>
+          </select>
+        </div>
         <div class="fi"><label>Turno</label><select id="citt"><option value="">Seleccionar turno</option><option>TM — Manana (06:00 - 14:00)</option><option>TT — Tarde (14:00 - 22:00)</option><option>TN — Noche (22:00 - 06:00)</option></select></div>
         <div class="fi" style="display:none"><label>Fecha</label><input type="date" id="citf"/></div>
       </div>
