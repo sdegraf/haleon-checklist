@@ -394,7 +394,7 @@ function rCILT(){
   if(linea==='boato1prim'&&frec){
     activeItems=ciltLineas.boato1prim.frecuencias[frec].items;
   } else {
-    activeItems=ciltItems;
+    activeItems=CILT;
   }
   var le='',gd=null;
   for(var i=0;i<activeItems.length;i++){
@@ -424,7 +424,7 @@ function subCILT(){var t=document.getElementById('citt').value,f=document.getEle
   if(!lineaSel){alert('Selecciona una linea.');return;}
   if(lineaSel==='boato1prim'&&!frecSel){alert('Selecciona la frecuencia.');return;}
   if(!t||!f||!fm){alert('Completa todos los campos.');return;}
-  var activeIt=(lineaSel==='boato1prim'&&frecSel)?ciltLineas.boato1prim.frecuencias[frecSel].items:ciltItems;
+  var activeIt=(lineaSel==='boato1prim'&&frecSel)?ciltLineas.boato1prim.frecuencias[frecSel].items:CILT;
   var lineaLabel=(lineaSel==='boato1prim')?(frecSel==='semanal'?'Boato 1 Prim Semanal':'Boato 1 Prim Diario'):'Boato 1 Sec';
   var d=0;for(var j=0;j<activeIt.length;j++){if(CV3[j]&&CV3[j].e)d++;}
   if(d<activeIt.length&&!confirm('Faltan '+(activeIt.length-d)+' puntos. Confirmar igual?'))return;
