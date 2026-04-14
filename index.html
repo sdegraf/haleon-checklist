@@ -342,7 +342,37 @@ function onCILTFrecChange(){
   rCILT();
 }
 
-function rCILT(){var c=document.getElementById('citl3');c.innerHTML='';var le='',gd=null;for(var i=0;i<CILT.length;i++){var it=CILT[i];if(it.eq!==le){gd=document.createElement('div');gd.className='cg';var tt=document.createElement('div');tt.className='cgt';tt.textContent=it.eq;gd.appendChild(tt);c.appendChild(gd);le=it.eq;}var rw=document.createElement('div');rw.className='cir';rw.id='cir'+i;var ph=(linea==='boato1prim'?CPB1P[i]:(linea!=='boato1prim'&&CP[i]?CP[i]:null))?'<img src="'+(linea==='boato1prim'?CPB1P[i]:CP[i])+'" class="cp" onclick="openM(this.src)" title="Toca para ampliar"/>'  :'<div class="cpp"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D3D1C7" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>';rw.innerHTML='<span class="ci3">'+(it.n||it.num||'')+'</span><div class="ci4"><div class="ci5">'+(it.nm||it.nombre||'')+'</div><div class="ci6">'+it.ds+'</div></div>'+ph+'<div class="cc"><div class="cbg"><button class="bh" id="ch'+i+'" data-i="'+i+'" onclick="sCILT(this,&apos;HECHO&apos;)">Hecho</button><button class="bnh" id="cn'+i+'" data-i="'+i+'" onclick="sCILT(this,&apos;NO HECHO&apos;)">No hecho</button></div><input class="co" type="text" id="co'+i+'" placeholder="Obs..." oninput="sObs('+i+',this.value)"/></div>';gd.appendChild(rw);}}
+function rCILT(){
+  var c=document.getElementById('citl3');
+  c.innerHTML='';
+  var linea=document.getElementById('cilt-linea').value;
+  var frec=document.getElementById('cilt-frec')?document.getElementById('cilt-frec').value:'';
+  var activeItems;
+  if(linea==='boato1prim'&&frec){
+    activeItems=ciltLineas.boato1prim.frecuencias[frec].items;
+  } else {
+    activeItems=ciltItems;
+  }
+  var le='',gd=null;
+  for(var i=0;i<activeItems.length;i++){
+    var it=activeItems[i];
+    if((it.eq||it.equipo)!==le){
+      gd=document.createElement('div');gd.className='cg';
+      var tt=document.createElement('div');tt.className='cgt';
+      tt.textContent=(it.eq||it.equipo);
+      gd.appendChild(tt);c.appendChild(gd);
+      le=(it.eq||it.equipo);
+    }
+    var rw=document.createElement('div');rw.className='cir';rw.id='cir'+i;
+    var photoSrc=linea==='boato1prim'?CPB1P[i]:CP[i];
+    var ph=photoSrc?'<img src="'+photoSrc+'" class="cp" onclick="openM(this.src)" title="Toca para ampliar"/>':'<div class="cpp"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D3D1C7" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>';
+    var descRaw=(it.ds||it.desc||'');
+    var descHtml=descRaw.split('|EXTRA|').map(function(p,idx){return idx===0?p:'<br/><span class="cilt-extra">+ Semanal</span><span class="cilt-extra-text">'+p+'</span>';}).join('');
+    rw.innerHTML='<span class="ci3">'+(it.n||it.num||'')+'</span><div class="ci4"><div class="ci5">'+(it.nm||it.nombre||'')+'</div><div class="ci6">'+descHtml+'</div></div>'+ph+'<div class="cc"><div class="cbg"><button class="bh" id="ch'+i+'" data-i="'+i+'" onclick="sCILT(this,&apos;HECHO&apos;)">Hecho</button><button class="bnh" id="cn'+i+'" data-i="'+i+'" onclick="sCILT(this,&apos;NO HECHO&apos;)">No hecho</button></div><input class="co" type="text" id="co'+i+'" placeholder="Obs..." oninput="sObs('+i+',this.value)"/></div>';
+    gd.appendChild(rw);
+  }
+}
+
 function sCILT(el,v){v=v.replace(/&apos;/g,"'");var i=parseInt(el.getAttribute('data-i'));if(!CV3[i])CV3[i]={};CV3[i].e=v;var rw=document.getElementById('cir'+i);document.getElementById('ch'+i).classList.toggle('sel',v=='HECHO');document.getElementById('cn'+i).classList.toggle('sel',v=='NO HECHO');rw.className='cir '+(v=='HECHO'?'rd':'rn');var d=0;for(var j=0;j<CILT.length;j++){if(CV3[j]&&CV3[j].e)d++;}document.getElementById('citb').style.width=Math.round(d/CILT.length*100)+'%';document.getElementById('citl2').textContent=d+' de '+CILT.length+' completados';}
 function sObs(i,v){if(!CV3[i])CV3[i]={};CV3[i].o=v;}
 function subCILT(){var t=document.getElementById('citt').value,f=document.getElementById('citf').value,fm=document.getElementById('citf2').value.trim();
