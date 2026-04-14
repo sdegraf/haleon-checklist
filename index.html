@@ -280,13 +280,10 @@ function goTo(v){window.scrollTo({top:0,behavior:'instant'});document.body.scrol
     document.getElementById('citsb').style.display='none';
     document.getElementById('citeb').style.display='none';
     CV3={};
-    document.getElementById('citb').style.width='0%';
-    document.getElementById('citl2').textContent='Selecciona una linea para comenzar';
-    document.getElementById('cilt-linea').value='';
-    document.getElementById('cilt-badge-ln').textContent='Seleccionar linea';
-    document.getElementById('cilt-badge-pts').textContent='— puntos';
     document.getElementById('cilt-frec-field').style.display='none';
-    rCILT();
+    document.getElementById('cilt-frec').value='';
+    document.getElementById('cilt-linea').value='boato1sec';
+    onCILTLineaChange();
   }}
 function goHome(){window.scrollTo({top:0,behavior:'instant'});document.body.scrollTop=0;document.documentElement.scrollTop=0;['cl-view','cilt-view'].forEach(function(x){document.getElementById(x).classList.remove('ac');});document.getElementById('sv').style.display='none';document.getElementById('hv').style.display='block';document.getElementById('bsv').style.display='none';document.getElementById('bi').style.display='none';document.getElementById('ht').textContent='Mantenimiento Autonomo';CV='home';}
 function showSup(){['hv','cl-view','cilt-view'].forEach(function(x){document.getElementById(x).style.display='none';});document.getElementById('sv').style.display='block';loadD();}
