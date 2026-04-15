@@ -578,7 +578,7 @@ var CILT=[
 {n:20,eq:'Final de linea',nm:'Aparejo neumatico (elevador de cajas)',ds:'Verificar que las ventosas no presenten rajaduras. Verificar posicion correcta para la caja. Comprobar funcionamiento.'}
 ];
 function goTo(v){setTimeout(function(){window.scrollTo(0,0);document.body.scrollTop=0;document.documentElement.scrollTop=0;},10);['hv','cl-view','cilt-view'].forEach(function(x){document.getElementById(x).style.display='none';});document.getElementById(v+'-view').style.display='block';document.getElementById('bi').style.display='inline-block';document.getElementById('bsv').style.display='inline-block';CV=v;document.getElementById('ht').textContent=v=='cl'?'Centerline':'CILT Diario';if(v=='cl'){
-    document.getElementById('clf').valueAsDate=new Date();
+    document.getElementById('clf').value=(function(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');})();
     document.getElementById('cll').value='';
     document.getElementById('clt').value='';
     document.getElementById('clf2').value='';
@@ -595,7 +595,7 @@ function goTo(v){setTimeout(function(){window.scrollTo(0,0);document.body.scroll
     document.getElementById('clbp').textContent='— puntos';
     document.getElementById('clbl').textContent='Seleccionar linea';
   }if(v=='cilt'){
-    document.getElementById('citf').valueAsDate=new Date();
+    document.getElementById('citf').value=(function(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');})();
     document.getElementById('citt').value='';
     document.getElementById('citf2').value='';
     document.getElementById('cits').disabled=false;
