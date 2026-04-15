@@ -631,7 +631,7 @@ function rCL(){var c=document.getElementById('cll3');c.innerHTML='';var lastEq='
 function sCS(el){var i=parseInt(el.getAttribute('data-i')),v=el.value;CV2[i]=v;var lb=document.getElementById('cl'+i),rw=document.getElementById('cr'+i);if(!v){el.className='vs';lb.className='sl em';lb.textContent='seleccionar';rw.className='cr';}else if(v=='OK'){el.className='vs ok';lb.className='sl ok';lb.textContent='OK';rw.className='cr rok';}else{el.className='vs nk';lb.className='sl nk';lb.textContent='NO OK';rw.className='cr rnk';}uCP();}
 function sCV(el){var i=parseInt(el.getAttribute('data-i')),v=el.value.trim();CV2[i]=v;var lb=document.getElementById('cl'+i),rw=document.getElementById('cr'+i);if(!v){el.className='vi';lb.className='sl em';lb.textContent='valor medido';rw.className='cr';}else{var st=chk(i,v);if(st=='ok'){el.className='vi ok';lb.className='sl ok';lb.textContent='OK';rw.className='cr rok';}else if(st=='nk'||st=='nok'){el.className='vi nk';lb.className='sl nk';lb.textContent='FUERA DE RANGO';rw.className='cr rnk';}else{el.className='vi ok';lb.className='sl ok';lb.textContent='Registrado';rw.className='cr rok';}}uCP();}
 function uCP(){var d=0;for(var j=0;j<CI.length;j++){if(CV2[j]&&CV2[j]!=='')d++;}var p=CI.length>0?Math.round(d/CI.length*100):0;document.getElementById('clb').style.width=p+'%';document.getElementById('cll2').textContent=d+' de '+CI.length+' completados';}
-function subCL(){var l=document.getElementById('cll').value,t=document.getElementById('clt').value,f=document.getElementById('clf').value,fm=document.getElementById('clf2').value.trim(),s=document.getElementById('sk').value;if(!l||!t||!f||!fm){alert('Completa todos los campos.');return;}if((l=='boato1'||l=='marchesini')&&!s){alert('Selecciona el SKU.');return;}if(!CI.length){alert('Selecciona una linea.');return;}var d=0;for(var j=0;j<CI.length;j++){if(CV2[j]&&CV2[j]!=='')d++;}if(d<CI.length&&!confirm('Faltan '+(CI.length-d)+' puntos. Confirmar igual?'))return;var h=new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'}),rows=[];for(var i=0;i<CI.length;i++){var it=CI[i],v=(CV2[i]&&CV2[i]!=='')?CV2[i]:'Sin completar',e;if(v=='Sin completar')e='Sin completar';else if(v=='OK'||v=='NO OK')e=v;else{var st=chk(i,v);e=st=='ok'?'OK':st=='nk'||st=='nok'?'NO OK':'Registrado';}rows.push(['CL',f,t,CL,fm,it.n,it.nm,it.d,v,e,'',h]);}sD('cl',rows);}
+function subCL(){var l=document.getElementById('cll').value,t=document.getElementById('clt').value,f=document.getElementById('clf').value,f=(function(d){var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];})(f),fm=document.getElementById('clf2').value.trim(),s=document.getElementById('sk').value;if(!l||!t||!f||!fm){alert('Completa todos los campos.');return;}if((l=='boato1'||l=='marchesini')&&!s){alert('Selecciona el SKU.');return;}if(!CI.length){alert('Selecciona una linea.');return;}var d=0;for(var j=0;j<CI.length;j++){if(CV2[j]&&CV2[j]!=='')d++;}if(d<CI.length&&!confirm('Faltan '+(CI.length-d)+' puntos. Confirmar igual?'))return;var h=new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'}),rows=[];for(var i=0;i<CI.length;i++){var it=CI[i],v=(CV2[i]&&CV2[i]!=='')?CV2[i]:'Sin completar',e;if(v=='Sin completar')e='Sin completar';else if(v=='OK'||v=='NO OK')e=v;else{var st=chk(i,v);e=st=='ok'?'OK':st=='nk'||st=='nok'?'NO OK':'Registrado';}rows.push(['CL',f,t,CL,fm,it.n,it.nm,it.d,v,e,'',h]);}sD('cl',rows);}
 function onCILTLineaChange(){
   var linea = document.getElementById('cilt-linea').value;
   var frecField = document.getElementById('cilt-frec-field');
@@ -710,7 +710,7 @@ function rCILT(){
 
 function sCILT(el,v){v=v.replace(/&apos;/g,"'");var i=parseInt(el.getAttribute('data-i'));if(!CV3[i])CV3[i]={};CV3[i].e=v;var rw=document.getElementById('cir'+i);document.getElementById('ch'+i).classList.toggle('sel',v=='HECHO');document.getElementById('cn'+i).classList.toggle('sel',v=='NO HECHO');rw.className='cir '+(v=='HECHO'?'rd':'rn');var d=0;var ln2=document.getElementById('cilt-linea').value;var fr2=document.getElementById('cilt-frec')?document.getElementById('cilt-frec').value:'';var aLen=(ln2==='boato1sec'&&fr2==='diario')?CILT.length:(ciltLineas[ln2]&&fr2?ciltLineas[ln2].frecuencias[fr2].items.length:CILT.length);for(var j=0;j<aLen;j++){if(CV3[j]&&CV3[j].e)d++;}document.getElementById('citb').style.width=Math.round(d/aLen*100)+'%';document.getElementById('citl2').textContent=d+' de '+aLen+' completados';}
 function sObs(i,v){if(!CV3[i])CV3[i]={};CV3[i].o=v;}
-function subCILT(){var t=document.getElementById('citt').value,f=document.getElementById('citf').value,fm=document.getElementById('citf2').value.trim();
+function subCILT(){var t=document.getElementById('citt').value,f=document.getElementById('citf').value,f=(function(d){var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];})(f),fm=document.getElementById('citf2').value.trim();
   var lineaSel=document.getElementById('cilt-linea').value;
   var frecSel=document.getElementById('cilt-frec')?document.getElementById('cilt-frec').value:'';
   if(!lineaSel){alert('Selecciona una linea.');return;}
@@ -759,7 +759,7 @@ function rT(){var ff=document.getElementById('ff').value,ft=document.getElementB
         fechaOk=d.substring(0,7)===fm;
       }
     }
-    return fechaOk&&(!ff||r[1]==ff)&&(!ft||r[0]==ft)&&(!fl||r[3].indexOf(fl)===0)&&(!ftu||r[2]==ftu);
+    var ffFmt=ff?(function(d){var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];})(ff):'';return fechaOk&&(!ff||r[1]==ffFmt||r[1]==ff)&&(!ft||r[0]==ft)&&(!fl||r[3].indexOf(fl)===0)&&(!ftu||r[2]==ftu);
   });var ok=fr.filter(function(r){return r[9]==='OK'||r[9]==='HECHO';}).length,nk=fr.filter(function(r){return r[9]==='NO OK'||r[9]==='NO HECHO';}).length,p=(ok+nk)>0?Math.round(ok/(ok+nk)*100):0;document.getElementById('kt').textContent=fr.length;document.getElementById('ko').textContent=ok;document.getElementById('kn').textContent=nk;document.getElementById('kp').textContent=(ok+nk)>0?p+'%':'—';var tb=document.getElementById('stb');if(!fr.length){tb.innerHTML='<tr><td colspan="12" class="em">No hay registros.</td></tr>';return;}tb.innerHTML=fr.map(function(r){var rs=r[9],pl=rs==='OK'||rs==='HECHO'?'<span class="pi pok">'+rs+'</span>':rs==='NO OK'||rs==='NO HECHO'?'<span class="pi pnk">'+rs+'</span>':'<span class="pi pnd">—</span>';var tp=r[0]==='CL'?'<span class="bg1">CL</span>':'<span class="bg3">CILT</span>';var fecha=String(r[1]||'').substring(0,10);
     var turno=String(r[2]||'').split(' ')[0];
     var tipo=r[0]==='CL'?'<span class="bg1">CL</span>':'<span class="bg3">CILT</span>';
@@ -782,7 +782,7 @@ function expXL(){var ff=document.getElementById('ff').value,ft=document.getEleme
         fechaOk=d.substring(0,7)===fm;
       }
     }
-    return fechaOk&&(!ff||r[1]==ff)&&(!ft||r[0]==ft)&&(!fl||r[3].indexOf(fl)===0)&&(!ftu||r[2]==ftu);
+    var ffFmt=ff?(function(d){var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];})(ff):'';return fechaOk&&(!ff||r[1]==ffFmt||r[1]==ff)&&(!ft||r[0]==ft)&&(!fl||r[3].indexOf(fl)===0)&&(!ftu||r[2]==ftu);
   });
   var frFixed=fr.map(function(r){
     return [r[0],String(r[1]||'').substring(0,10),String(r[2]||'').split(' ')[0],r[3],r[4],r[5],r[6],r[7],r[8],r[9],r[10],r[11]];
