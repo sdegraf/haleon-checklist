@@ -730,7 +730,25 @@ function loadD(){
       if(!r.ok) throw new Error('HTTP '+r.status);
       return r.json();
     })
-    .then(function(d){AR=d.rows||[];rT();})
+    .then(function(d){
+      AR=(d.rows||[]).map(function(r){
+        // Fix date field: convert ISO date string or Date to local DD/MM/YYYY
+        if(r[1]){
+          var raw=String(r[1]);
+          // If it looks like ISO: "2026-04-15T..." or "2026-04-15"
+          if(raw.match(/^\d{4}-\d{2}-\d{2}/)){
+            var dt=new Date(raw);
+            // Use local date parts to avoid UTC shift
+            var dd=String(dt.getDate()).padStart(2,'0');
+            var mm=String(dt.getMonth()+1).padStart(2,'0');
+            var yyyy=dt.getFullYear();
+            r[1]=dd+'/'+mm+'/'+yyyy;
+          }
+        }
+        return r;
+      });
+      rT();
+    })
     .catch(function(e){
       console.error('Error:',e);
       document.getElementById('stb').innerHTML='<tr><td colspan="12" class="em">Error al cargar. Verifica que el Apps Script este publicado correctamente.</td></tr>';
@@ -738,8 +756,13 @@ function loadD(){
 }
 function rT(){var ff=document.getElementById('ff').value,ft=document.getElementById('ft').value,fl=document.getElementById('fl').value,ftu=document.getElementById('ftu').value;var fm=document.getElementById('fmes').value;
   var fr=AR.slice().sort(function(a,b){
-    var da=String(a[1]).substring(0,10)+' '+(String(a[11]||''));
-    var db=String(b[1]).substring(0,10)+' '+(String(b[11]||''));
+    var toSort=function(s){
+      var d=String(s||'');
+      if(d.match(/^\d{2}\/\d{2}\/\d{4}/)){var p=d.split('/');return p[2]+'-'+p[1]+'-'+p[0];}
+      return d.substring(0,10);
+    };
+    var da=toSort(a[1])+' '+(String(a[11]||''));
+    var db=toSort(b[1])+' '+(String(b[11]||''));
     return db.localeCompare(da);
   }).filter(function(r){
     var fechaStr=String(r[1]||'').substring(0,10);
