@@ -1,0 +1,1794 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boato TORNADO EVO 2.0 – Asistente Técnico</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap');
+
+:root {
+  --red: #D92B2B;
+  --dark: #111213;
+  --mid: #1E2022;
+  --border: #2E3235;
+  --text: #E8EAEC;
+  --muted: #8A9099;
+  --user-bg: #1A2A1A;
+  --bot-bg: #1E2022;
+  --accent: #E8EAEC;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'IBM Plex Sans', sans-serif;
+  background: var(--dark);
+  color: var(--text);
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* HEADER */
+header {
+  background: var(--mid);
+  border-bottom: 2px solid var(--red);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.logo-badge {
+  background: var(--red);
+  color: #fff;
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 5px 9px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.header-info h1 {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.header-info p {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'IBM Plex Mono', monospace;
+  margin-top: 1px;
+}
+
+.status-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #3DCA6E;
+  box-shadow: 0 0 6px #3DCA6E88;
+  margin-left: auto;
+  flex-shrink: 0;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* QUICK CHIPS */
+.chips-bar {
+  background: var(--dark);
+  padding: 10px 16px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.chip {
+  background: var(--mid);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 11px;
+  font-family: 'IBM Plex Mono', monospace;
+  padding: 5px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.chip:hover {
+  border-color: var(--red);
+  color: var(--text);
+  background: #2A1515;
+}
+
+/* CHAT AREA */
+#chat {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  scroll-behavior: smooth;
+}
+
+#chat::-webkit-scrollbar { width: 4px; }
+#chat::-webkit-scrollbar-track { background: transparent; }
+#chat::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.msg {
+  display: flex;
+  gap: 10px;
+  animation: fadeUp 0.2s ease;
+  max-width: 100%;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.msg.user { flex-direction: row-reverse; }
+
+.avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.msg.bot .avatar {
+  background: var(--red);
+  color: #fff;
+  font-size: 11px;
+}
+
+.msg.user .avatar {
+  background: var(--border);
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.bubble {
+  background: var(--bot-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px 12px 12px 12px;
+  padding: 12px 14px;
+  font-size: 13.5px;
+  line-height: 1.65;
+  max-width: calc(100% - 50px);
+  position: relative;
+}
+
+.msg.user .bubble {
+  background: var(--user-bg);
+  border-color: #2E4A2E;
+  border-radius: 12px 4px 12px 12px;
+  color: #C8E6C9;
+}
+
+.bubble strong { color: #fff; font-weight: 600; }
+
+.bubble .alarm-tag {
+  display: inline-block;
+  background: #3A1A1A;
+  border: 1px solid var(--red);
+  color: var(--red);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
+
+.bubble ul { margin: 6px 0 6px 16px; }
+.bubble li { margin-bottom: 4px; }
+
+.bubble .section-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--red);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  margin-top: 10px;
+}
+
+.bubble .section-label:first-child { margin-top: 0; }
+
+/* TYPING */
+.typing-indicator {
+  display: flex;
+  gap: 4px;
+  padding: 4px 0;
+  align-items: center;
+}
+
+.typing-indicator span {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--muted);
+  animation: bounce 1.2s infinite;
+}
+
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+/* INPUT AREA */
+.input-wrap {
+  background: var(--mid);
+  border-top: 1px solid var(--border);
+  padding: 12px 16px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+#userInput {
+  flex: 1;
+  background: var(--dark);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13.5px;
+  padding: 10px 14px;
+  resize: none;
+  min-height: 42px;
+  max-height: 120px;
+  outline: none;
+  transition: border-color 0.15s;
+  line-height: 1.5;
+}
+
+#userInput:focus { border-color: var(--red); }
+#userInput::placeholder { color: var(--muted); }
+
+#sendBtn {
+  background: var(--red);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  width: 42px;
+  height: 42px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s;
+  font-size: 16px;
+}
+
+#sendBtn:hover { background: #B82424; transform: scale(1.05); }
+#sendBtn:disabled { background: var(--border); cursor: not-allowed; transform: none; }
+
+.footer-note {
+  text-align: center;
+  font-size: 10px;
+  color: var(--muted);
+  font-family: 'IBM Plex Mono', monospace;
+  padding: 4px 0 0;
+}
+
+/* WELCOME */
+.welcome-card {
+  background: var(--mid);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--red);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 4px;
+}
+
+.welcome-card h2 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.welcome-card p {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.welcome-card .machine-id {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--red);
+  margin-bottom: 8px;
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 480px) {
+  header { padding: 10px 14px; }
+  .chips-bar { padding: 8px 12px; }
+  #chat { padding: 14px 12px; }
+  .input-wrap { padding: 10px 12px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-badge">BOATOPACK</div>
+  <div class="header-info">
+    <h1>Asistente Técnico</h1>
+    <p>TORNADO EVO 2.0 · Manual de Troubleshooting</p>
+  </div>
+  <div class="status-dot"></div>
+</header>
+
+<div class="chips-bar" id="chips">
+  <span class="chip" onclick="sendChip(this)">🔴 Alarma JAWS</span>
+  <span class="chip" onclick="sendChip(this)">⚠️ Temperatura fuera de rango</span>
+  <span class="chip" onclick="sendChip(this)">📽️ Film roto</span>
+  <span class="chip" onclick="sendChip(this)">🔧 Cambio de bobina</span>
+  <span class="chip" onclick="sendChip(this)">🚪 Puertas de seguridad</span>
+  <span class="chip" onclick="sendChip(this)">✂️ Problema con cuchilla</span>
+  <span class="chip" onclick="sendChip(this)">📦 Bolsitas atascadas</span>
+  <span class="chip" onclick="sendChip(this)">🔄 Encendido de máquina</span>
+  <span class="chip" onclick="sendChip(this)">⚖️ Alarma dosificador</span>
+  <span class="chip" onclick="sendChip(this)">📐 Alineamiento bobina</span>
+  <span class="chip" onclick="sendChip(this)">🏭 Problema astucciadora</span>
+  <span class="chip" onclick="sendChip(this)">🔬 Pasaje de film</span>
+  <span class="chip" onclick="sendChip(this)">📊 Resetear contadores</span>
+  <span class="chip" onclick="sendChip(this)">💾 Guardar receta</span>
+  <span class="chip" onclick="sendChip(this)">🔁 Cambio de formato</span>
+  <span class="chip" onclick="sendChip(this)">🪡 Problema strip</span>
+  <span class="chip" onclick="sendChip(this)">📭 Fin de producto</span>
+  <span class="chip" onclick="sendChip(this)">🛠️ Plan de mantenimiento</span>
+  <span class="chip" onclick="sendChip(this)">🧹 Limpieza dosador</span>
+</div>
+
+<div id="chat">
+  <div class="welcome-card">
+    <div class="machine-id">MOD: TO8N 2.0 · REV.0 · HALEON ARG</div>
+    <h2>¿Qué problema estás teniendo?</h2>
+    <p>Describí el síntoma, código de alarma o consulta de mantenimiento y te respondo basándome en los 4 fascículos técnicos oficiales de Boato Pack: Uso y Descripción, Training y Resolución de Problemas, y Mantenimiento.</p>
+  </div>
+</div>
+
+<div class="input-wrap">
+  <textarea id="userInput" placeholder="Ej: tengo la alarma JAWS CUMULATIVE, qué hago?" rows="1"
+    onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+  <button id="sendBtn" onclick="sendMessage()" title="Enviar">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="22" y1="2" x2="11" y2="13"></line>
+      <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+    </svg>
+  </button>
+</div>
+<div class="footer-note">Respuestas basadas en los 4 fascículos oficiales Boato Pack – TO8N 2.0 Rev.0</div>
+
+<script>
+const MANUAL_CONTEXT = `
+Eres un asistente técnico especializado en la máquina confeccionadora TORNADO EVO 2.0 de Boato Pack (modelo TO8N 2.0, Rev. 0), instalada en Haleon Argentina.
+Respondes en ESPAÑOL, de forma clara, directa y práctica para operadores de planta.
+Usás un tono profesional pero simple, sin tecnicismos innecesarios.
+Cuando respondés sobre una alarma, siempre incluís: qué significa, cuál es la causa probable y los pasos concretos para resolverla.
+Si la pregunta es sobre una operación, dás los pasos en orden numerado.
+Siempre aclarás si la acción requiere detener la máquina o puede hacerse en marcha.
+
+=== INFORMACIÓN DEL MANUAL OFICIAL – USO E DESCRIZIONE TO8N 2.0 REV.0 ===
+
+--- DESCRIPCIÓN GENERAL ---
+La TORNADO EVO 2.0 es una confeccionadora vertical automática de alta velocidad para formación y llenado de bolsitas de 4 lados con material termosellable.
+La línea completa comprende 4 secciones:
+1. Macchina base: formación de la bolsita desde el material de embalaje
+2. Dosatore: recepción, dosificación e inserción del producto en las bolsitas
+3. Interfaccia (TOCL): agrupamiento de bolsitas y preparación para la astucciadora
+4. Astucciatrice: apertura de cajas preformadas, inserción de bolsitas y cierre con cola caliente
+
+TERMINOLOGÍA CLAVE:
+- Macchina / Confezionatrice: máquina confeccionadora principal
+- Ganasce: mordazas de sellado transversal (Jaws)
+- Rulli saldanti: rodillos de sellado longitudinal (Rolls)
+- Bobina: rollo de material de embalaje termosellable
+- Film: material de embalaje
+- Svolgibobina / Unwinder: sistema desbobinador
+- Ballerino: eje tensor móvil que regula la tensión del film
+- Tacca: marca de registro en el film para control de longitud de bolsita
+- Giunzione: unión entre dos bobinas de film
+- Interfaccia (TOCL): módulo entre confeccionadora y astucciadora
+- Astucciatrice: máquina inscatoladora (encajadora)
+- Q.E.: cuadro eléctrico / tablero eléctrico
+- D.P.I.: dispositivos de protección individual (EPP)
+- C.A.T.: centro de asistencia técnica Boato Pack
+
+ROLES DEL PERSONAL:
+- Operatore: personal de producción (uso, montaje, mantenimiento de rutina)
+- Manutentore meccanico: personal de mantenimiento mecánico calificado
+- Manutentore elettrico: personal de mantenimiento eléctrico calificado
+- Tecnico qualificato C.A.T.: técnico oficial de Boato Pack (instalación, puesta en marcha, mantenimiento extraordinario)
+
+=== CAPÍTULO 2 – DESCRIPCIÓN MECÁNICA DE LA MÁQUINA ===
+
+--- 2.1 PARTES PRINCIPALES DE LA CONFECCIONADORA ---
+1. Sistema svolgi-bobina (desbobinador)
+2. Telaio e meccanica interna (chasis y mecánica interna)
+3. Sistema modulare formazione busta (sistema modular de formación de bolsita)
+4. Sistema di uscita buste (sistema de salida de bolsitas)
+5. Quadro elettrico (tablero eléctrico)
+
+--- 2.2 SISTEMA SVOLGI-BOBINA (DESBOBINADOR) ---
+El sistema desarrolla el material de embalaje termosellable para la creación de la bolsita. El grupo está fijado a la máquina sobre 4 cojinetes. El pasaje del film sigue un recorrido preestablecido por el fabricante.
+
+El sistema es automático: regula la velocidad de la bobina y su alineamiento. Los parámetros de gestión se configuran en el panel operador.
+
+Componentes del svolgibobina:
+1. Albero porta bobina espansibile (eje portabobina expansible)
+2. Sistema giunzione film (sistema de empalme de film)
+3. Sistema regolazione velocità bobina (sistema de regulación de velocidad)
+4. Sistema allineamento bobina (sistema de alineamiento de bobina)
+5. Sistema di codifica (sistema de codificación — opcional)
+
+2.2.1 ALBERO PORTA BOBINA ESPANSIBILE:
+El eje portabobina es expansible: sostiene la bobina y desarrolla el material de embalaje. Está controlado por motor asincrónico trifásico vía inverter.
+La cámara de expansión permite fijar el núcleo de la bobina al eje mediante aire comprimido.
+
+2.2.2 SISTEMA GIUNZIONE FILM (pulsantiera lateral):
+Se habilita SOLO en modalidad manual con puerta abierta. El grupo de empalme puede elevarse mediante los pernos laterales para permitir la inserción de bobinas de mayor diámetro.
+
+Funciones de la pulsantiera:
+- BLOCCO 1: bloquea/desbloquea (manteniendo presionado) el cilindro superior
+- AVANTI: avanza (enrolla) la bobina
+- INDIETRO: retrocede (desenrolla) la bobina
+- BLOCCO 2: bloquea/desbloquea (manteniendo presionado) el cilindro inferior
+- AVANTI + INDIETRO simultáneos (2 segundos): desbloquea el eje portabobina (con llave de seguridad cerrada)
+- LAMA: cuchilla de corte de cinta adhesiva (PELIGRO: extremar precaución)
+
+En el grupo de empalme hay un dispositivo para aplicar y cortar la cinta adhesiva de empalme.
+Al terminar el film, los dos rodillos o-ring bloquean el material sobre la placa para ejecutar el cambio de bobina.
+
+2.2.3 SISTEMA REGULACIÓN VELOCIDAD BOBINA (ballerino + sensor ultrasónico):
+La velocidad de la bobina se regula automáticamente en función de:
+- Velocidad de la máquina
+- Dimensión de la bobina (sensor ultrasónico)
+- Regulación automática de longitud de bolsita (tacca)
+
+SENSOR ULTRASÓNICO: Instalado en la parte inferior del grupo svolgibobina, mide el diámetro instantáneo de la bobina. Permite mostrar en panel la dimensión de la bobina y configurar el valor de parada para cambio de bobina o señalización de bobina casi terminada.
+
+POTENZIOMETRO LINEARE (ballerino): Detecta la posición del eje ballerino:
+- Ballerino se va hacia arriba → film se desarrolla demasiado lento
+- Ballerino cae hacia abajo → film se desarrolla demasiado rápido O film roto
+Conociendo la posición instantánea y las posiciones extremas, se regula la velocidad de rotación del eje svolgibobina.
+
+2.2.4 SISTEMA ALINEAMIENTO BOBINA:
+El sistema mueve todo el grupo portabobina para mantener el alineamiento correcto del material de embalaje.
+La posición del film es determinada por dos sensores a forquilla (fotocélulas en horquilla):
+- Si NINGÚN sensor detecta el film → el sistema corrige hacia la derecha
+- Si AMBOS sensores detectan el film → el sistema corrige hacia la izquierda
+El verso de corrección es desde el frente de la máquina.
+El sensor de proximidad determina el desplazamiento máximo del bloque.
+Si el sensor no detecta la placa del svolgibobina → la máquina se detiene en alarma "ALLINEAMENTO MASSIMO RAGGIUNTO".
+Desde el panel operador es posible habilitar el alineamiento automático y/o mover la bobina manualmente en la dirección deseada.
+
+--- 2.3 SISTEMA DE CODIFICACIÓN (opcional) ---
+Las cabezas de impresión por chorro de tinta se instalan en la base posterior superior.
+Se mueven sobre un actuador mecánico controlado por motor brushless.
+Sistema de recuperación de papel:
+- Freno carta: mantiene fijo el papel en la zona de impresión
+- Ballerino di recupero: recupera el papel manteniendo la tensión correcta durante la impresión
+Ambos dispositivos son controlados por cilindros neumáticos. Los parámetros de movimiento y control de la impresora se gestionan desde el panel operador.
+
+--- 2.4 TELAIO E MECCANICA INTERNA ---
+El chasis de la máquina es de acero inox 304 y contiene:
+1. Sistema di visione (cámaras de visión + lector de código de barras)
+2. Gruppo superiore passaggio film (grupo superior de pasaje de film)
+3. Meccanica interna (mecánica interna)
+4. Sistema pneumatico di base (sistema neumático de base)
+
+2.4.1 SISTEMA DE VISIÓN:
+Compuesto por dos tipos de dispositivos:
+- Telecamera: verifica la legibilidad correcta de la impresión realizada por las cabezas de chorro de tinta
+- Lettore codice a barre: verifica que el material de embalaje corresponda al tipo de producto a embalar (el código de barras impreso en el material identifica el material correspondiente)
+Las calibraciones y regulaciones de ambos dispositivos se gestionan desde el software del fabricante, accesible vía panel operador.
+
+2.4.2 GRUPPO SUPERIORE PASSAGGIO FILM:
+Instalado a la salida del film en la zona de trabajo frontal de la máquina. Contiene:
+- Coltello rotante pneumatico (cuchilla rotante neumática): divide el material de embalaje en dos fajas. Se habilita neumáticamente; la posición del cuchillo se regula con volantino, con indicador de posición accesible desde el exterior de las protecciones.
+- Sensore giunzione: detecta la presencia de la unión del film, permitiendo a la máquina inhibir la dosada en los ciclos necesarios y descartar las bolsitas afectadas. Los parámetros de funcionamiento se configuran en el panel.
+
+2.4.3 MECCANICA INTERNA:
+El movimiento de los ejes para la formación del producto se ejecuta mediante motores brushless instalados en la placa frontal. El sistema de reductores, poleas y correas permite maximizar la eficiencia de los movimientos.
+- Motor brushless rulli saldanti: mueve los rodillos de traino laterales y los rodillos staccabuste
+
+2.4.4 SISTEMA NEUMÁTICO DE BASE:
+Instalado en la placa frontal, compuesto por:
+- Filtro regulador
+- Dos válvulas de seguridad con presóstato digital
+- Grupo electroválvulas (comanda cada accionamiento neumático individual)
+
+--- 2.5 SISTEMA MODULARE FORMAZIONE BUSTA ---
+El sistema está compuesto por módulos de fácil sustitución para simplificar las operaciones de cambio de formato.
+
+Componentes en orden de proceso:
+1. Centraggio/allineamento fasce film
+2. Taglio longitudinale superiore
+3. Saldatura/formazione buste
+4. Stazioni libere opzionali
+5. Rulli stacca-buste
+6. Stazione di taglio trasversale
+
+2.5.1 CENTRAGGIO/ALINEAMIENTO FAJAS DE FILM:
+Las fajas a la salida del grupo superior de pasaje necesitan regulaciones antes de entrar a la zona de soldadura:
+- Rulli divisori: dividen el material de embalaje en dos fajas
+- Regolazione rulli divisori fasce: ajustando el volantino se regula la posición de las dos fajas en la entrada a los rodillos saldantes
+- Rulli folli passaggio film: dirigen las fajas desde los rulli divisori hasta los rulli gommati di traino
+- Sistema tensione e centraggio stampa facce: regula la tensión de la faja y la posición de la impresión entre las dos caras de la bolsita
+- Rulli di traino: arrastran el material de embalaje a la misma velocidad que los rulli saldanti
+- Fotocellula marca (tacca): detecta la marca de registro en el film y regula automáticamente (dentro de un rango determinado) una corrección en la velocidad de los rodillos. Desde el panel se puede habilitar la función control tacca y ver la longitud de bolsita real detectada.
+
+2.5.2 TAGLIO LONGITUDINALE SUPERIORE:
+El corte longitudinal superior es ejecutado por cuchillas rotantes neumáticas: el material pasa entre las cuchillas y el rodillo de contracorte, permitiendo separar el papel en fajas más estrechas.
+La habilitación (neumática) se gestiona desde panel.
+Componentes: coltellini rotanti pneumatici, rullo di scontro, maniglia di serraggio, vite di fissaggio.
+
+2.5.3 SALDATURA FORMAZIONE BUSTE:
+Las bolsitas son selladas por los 4 lados por rodillos y mordazas saldantes.
+La temperatura de cada eje se regula desde panel. La termoresistencia interna se alimenta en función de la temperatura detectada por la termocoppia y los seteos del panel.
+PUNTO FUNDAMENTAL: la regulación mecánica de la presión de cada grupo es crítica para una soldadura óptima. Esta presión es visible también desde el panel.
+
+Componentes:
+- Rulli saldanti (saldadura longitudinal): arrastran el papel dentro de la zona de formación mientras ejecutan la soldadura vertical. Están conectados mecánicamente a los rulli di traino y stacca-buste. La velocidad puede variar según la lectura de la tacca.
+- Ganasce saldanti (saldadura transversal): ejecutan el sellado transversal de las bolsitas. Pueden llevar cuchillas/dientes opcionales en los bordes laterales de las soldaduras para realizar el "easy tear notch" (invito al desgarre). REQUIERE mucha precisión en el posicionamiento.
+- Termocoppie: ubicadas en las posiciones de cada grupo saldante
+- Viti regolazione pressione rulli / ganasce: regulan la presión mecánica
+
+2.5.4 STAZIONI LIBERE OPZIONALI:
+Pueden contener según la necesidad del producto:
+- Stazione di taglio longitudinale inferiore: dos ejes, puede ser de corte o perforación; las lamas rotan a la misma velocidad que los rulli saldanti para no frenar el papel.
+- Ionizzatore: elimina la electricidad estática del papel mediante iones. Se instala en la zona de soldadura para evitar que el material se adhiera electrostáticamente. Se habilita al arranque de la máquina.
+- Stazione abbinamento in linea: garantiza la separación de las fajas de bolsitas soplando aire comprimido e insertando lamas entre ellas.
+
+2.5.5 RULLI STACCA-BUSTE:
+Instalados entre la estación de corte transversal. Los rodillos superiores permiten el posicionamiento correcto de las bolsitas para un corte óptimo en todas las líneas. Los rodillos inferiores permiten la inserción correcta en la cinta o tobogán de salida.
+Los rodillos entran en contacto con el papel SOLO al arranque de la máquina, mediante cilindros neumáticos.
+El material de los rodillos varía según las características del material de embalaje.
+Componentes: rulli stacca-buste superiori, rulli stacca-buste inferiori, scivolo uscita buste, cilindro pneumatico.
+
+2.5.6 STAZIONE DI TAGLIO TRASVERSALE:
+Ubicada a la salida de la zona de formación de bolsitas. Formada por dos ejes:
+- Contro-coltello: eje fijo con lama regulable. Actuando sobre las vitas, la lama se acerca o aleja de la que está en rotación, regulando la fuerza de corte.
+- Coltello: eje rotativo controlado por motor que ejecuta el corte en contacto con el contra-cuchillo, a mitad de la soldadura transversal. La fase de corte se regula desde el panel.
+⚠️ ATENCIÓN: un acercamiento excesivo entre las 2 lamas puede causar deterioro prematuro de las cuchillas.
+
+--- 2.6 SISTEMA DI USCITA BUSTE ---
+El sistema permite la salida de las bolsitas según las siguientes características:
+- Llenado de la bolsita con producto
+- Características cualitativas (material de embalaje y impresión correcta)
+- Presencia de una unión (giunzione)
+
+Tabla de estados de los deviadores:
+| Estado            | Deviador superior | Deviador inferior |
+|-------------------|------------------|------------------|
+| SCARTO MACCHINA   | OFF              | OFF              |
+| MESSA IN LINEA    | ON               | OFF              |
+| CAMPIONAMENTO     | OFF              | ON               |
+
+2.6.1 CONTROLLO PRESENZA BUSTINE:
+Fotocélula en la entrada de la cinta de salida que determina la temporización del sistema de agrupamiento y el conteo de bolsitas en la cinta transportadora de grupos.
+
+2.6.2 NASTRO DI USCITA:
+Transporta las bolsitas dosadas hacia la balanza. Si las bolsitas satisfacen las características del sistema de salida, son llevadas al nastro di uscita y durante el recorrido son alineadas para que lleguen a la balanza una línea completa al mismo tiempo.
+
+--- 2.7 DOSATORE (DOSIFICADOR DE POLVOS FAF) ---
+El dosador FAF (Auger Filler doser) ejecuta la dosada de producto garantizando precisión y versatilidad.
+
+Trayecto del producto:
+1ª tolva (tramoggia 1): recibe el producto; agitador mantiene el producto en movimiento para evitar compactamiento. Sensor de nivel activa la carga cuando el nivel es bajo.
+↓ (via viti a coclea orizzontali)
+2ª tolva (tramoggia 2): polmone de producto a dosar; agitadores internos + sensor de nivel. Las viti a coclea dosificadoras (una por pista, motor dedicado) descargan el producto.
+↓ (via tubos alimentadores)
+Tubos de alimentación → bolsita
+
+TIPOS DE TUBOS DE ALIMENTACIÓN:
+- NFF (No Free Flowing): tubo simple con vite a coclea interna
+- FF (Free Flowing): tubo externo (diámetro mayor) + tubo interno (diámetro menor) con sistema cut-off. El tubo interno se llama "tubo cut-off". Los bordes del tubo interno tienen solapas soldadas para evitar la salida continua del producto.
+
+2.7.1 CARICO PRODOTTO (carga de producto):
+Puede realizarse mediante:
+- Cargador "Nilfisk" (opcional)
+- Coclea de carga de producto (opcional): tubo + vite a coclea + motor
+- Valvola "CO.RA" (consultar documentación específica)
+
+2.7.2 SISTEMA CUT-OFF Y MOVIMENTACIÓN:
+El tubo permanece siempre cerrado fuera de la dosada (para que el producto no salga).
+Durante la dosada: el tubo se eleva, la vite a coclea comienza a rotar y el producto cae en la bolsita.
+Al terminar la dosada: el tubo se cierra, bloqueando la salida del producto.
+El movimiento vertical de los tubos (arriba-abajo) es dado por un servomotor fijado sobre la estructura cut-off.
+La estructura, gracias a guías lineales, también permite el desplazamiento de los tubos durante operaciones de remoción de la tolva para mantenimiento/limpieza.
+El sensor de proximidad determina la posición de homing del dosador.
+
+2.7.3-2.7.4 TOLVAS (tramogge):
+PRIMERA TOLVA: evita el compactamiento del producto, lo agita y distribuye correctamente en las distintas pistas y en la segunda tolva. Sensor de nivel lateral activa la carga cuando el nivel es bajo.
+SEGUNDA TOLVA: posicionada sobre los tubos alimentadores. Funciona como pulmón para contener el producto a dosar, distribuyéndolo en los distintos tubos. Agitadores internos + sensor de nivel.
+
+2.7.7 MOVIMENTACIÓN ESTRUCTURA DOSADOR:
+Toda la estructura del dosador puede subir y bajar (hasta 240mm respecto a la posición normal de trabajo) gracias a un actuador neumático dentro del box dosador.
+Sensores de posición (fin de carrera) detectan cuando el pistón completó el recorrido completo. Detectan el campo magnético de imanes instalados dentro del pistón del cilindro.
+Las electroválvulas dentro de la caja controlan: movimiento del dosador, bloqueo de seguridad en posición elevada, sistema cut-off, agitadores y vibradores neumáticos.
+Guías lineales entre caja interna y externa facilitan el movimiento vertical del dosador.
+
+--- 2.8 BILANCIA "WIPOTEC" ---
+La balanza controla el peso de las bolsitas.
+En cada ciclo verifica que el peso de cada bolsita individual de cada línea esté dentro del rango previsto, descartando automáticamente todas las que no cumplan.
+Según las configuraciones, realiza un muestreo del peso de una fila de bolsitas, enviando el feedback a la máquina para corregir la dosada en positivo o negativo donde sea necesario (en cada coclea individual se aumenta o disminuye el número de giros).
+Todas las bolsitas que están dentro del rango de peso son "inscatolables" (cumplen todas las características previstas: impresión correcta, dosada correcta, producto y material de embalaje coherentes) y se envían a la interfaz TOCL.
+
+--- 2.9 INTERFACCIA TOCL ---
+La interfaz (modelo TOCL) se encarga de la formación de los grupos de bolsitas para insertar en las cajas.
+Estructuralmente está vinculada a la astucciadora TORNADO EVO 2.
+El acceso es mediante puertas perimetrales y de techo, cada una con su llave de seguridad correspondiente.
+
+Componentes de la interfaz:
+1. Gruppo divisore
+2. Gruppo discesa buste
+3. Gruppo di trasporto
+4. Gruppo compositore
+5. Telaio interfaccia
+
+2.9.1 GRUPPO DIVISORE:
+Ubicado en la entrada a la línea. Se encarga de:
+- Mantener las bolsitas separadas en la línea
+- Efectuar el descarte si la línea de bolsitas no está completa
+- Verificar la presencia de la línea completa para activar el grupo de bajada de bolsitas
+
+Componentes: sistema di scarto, cinghioli trasporta prodotto, motore asincrono, fotocellule presenza busta.
+
+SCARTO GRUPPO DIVISORE:
+El sistema de descarte está formado por un tobogán (uno por cada línea) comandado por cilindro neumático.
+El tobogán permite el descarte de toda la línea de bolsitas si no está completa.
+Normalmente la línea llega incompleta porque una o más bolsitas no están dentro del rango de tolerancia de peso de la balanza → la balanza descartó solo las bolsitas "incorrectas", dejando pasar las correctas.
+El descarte de la línea incompleta se hace porque incluso una sola bolsita menos en una línea podría generar problemas en el funcionamiento de la astucciadora.
+Las bolsitas con peso correcto descartadas por el sistema caen en un cajón y pueden recuperarse para ser inscatoladas manualmente.
+Componentes: scivolo, cilindro pneumatico di controllo, cassetto di scarto.
+
+Las fotocélulas a la salida del gruppo divisore hacen un control adicional: si llega una fila incompleta, la máquina señaliza error y se detiene en emergencia. Se debe verificar el motivo del descarte fallido y retirar todas las bolsitas de la línea incompleta del gruppo discesa buste.
+
+2.9.2 GRUPPO DISCESA BUSTE:
+El grupo de bajada apila las bolsitas una sobre otra creando una pequeña columna.
+Compuesto por Buffer y Stackers:
+- BUFFER: forquilla horizontal que se mueve por correa lateral comandada por motor. Cuando espera la llegada de bolsitas permanece insertada dentro de la estación de bajada vertical; cuando completa el conteo de bolsitas previsto (recomendado: 2), el buffer sale dejando caer las bolsitas sobre los stackers.
+- STACKERS: similar al buffer pero con doble forquilla para una bajada más lineal. Es sobre los stackers donde se apila el número total previsto de bolsitas por columna. Los stackers esperan el número configurado de descargas del buffer antes de descargar a su vez el contenido en los cajones del nastro di trasporto.
+
+2.9.3 GRUPPO DI TRASPORTO:
+Transporta las bolsitas desde el grupo de bajada al compositore.
+Nastro transportador con cajones que recogen las columnas de bolsitas ya apiladas.
+El nastro permanece inmóvil durante todo el proceso de bajada, y una vez terminada la descarga de los stackers, el motor lo pone en movimiento.
+El movimiento se interrumpe con las pausas que permiten el vaciado de los cajones por parte del spintore (empujador).
+El spintore se activa por la señal de la fotocélula (que verifica la presencia de bolsitas en el cajón) y empuja la columna hacia el compositore solo cuando el cajón está en posición horizontal. Un cilindro neumático "di centraggio" se inserta lateralmente en el cajón durante el tiempo de trabajo del spintore para evitar que las bolsitas caigan.
+
+2.9.4 GRUPPO COMPOSITORE:
+Crea el "pacco" (paquete) de bolsitas que será llevado a la astucciadora por el nastro prodotto.
+Doble nastro (dos nastros en el mismo recorrido, controlados por motores distintos, trabajando de forma complementaria). Cada nastro tiene dos grupos de 6 paletas. Las paletas recogen y retienen las bolsitas apiladas (en horizontal) que llegan del gruppo di trasporto empujadas por el spintore. Según el formato de producción, los nastros gestionan el desplazamiento de las paletas en posición de "raccolta buste" y hacia el nastro prodotto.
+
+2.9.5 TELAIO INTERFACCIA:
+Base de soporte para todas las demás estaciones. Contiene la sección de distribución de señales eléctricas (provenientes del cuadro eléctrico de la astucciadora) y dos toboganes de descarte.
+Morsettiera eléctrica dentro del telaio cerrado, en la parte bajo el sistema de descarte del gruppo divisore.
+Los dos toboganes sirven para el eventual descarte de bolsitas del gruppo di trasporto (si el cajón no está lleno como debería) y del gruppo compositore (si el nastro prodotto no se mueve, para evitar problemas en línea).
+
+--- 2.10 ASTUCCIATRICE ---
+La astucciadora comprende todas las estaciones que gestionan la creación de la caja (astuccio), el llenado con bolsitas, el cierre, la impresión y la verificación del proceso completo.
+
+2.10.1 NASTRO PRODOTTO:
+Transporta las bolsitas a la salida de la interfaz (ya agrupadas) al interior de la astucciadora.
+El nastro tiene rieles dentro de los cuales se detienen las bolsitas cuando son posicionadas por el compositore; también tiene dos guías para mantener las bolsitas en posición vertical.
+Una fotocélula en la entrada de la astucciadora verifica la presencia/ausencia del grupo de bolsitas en el nastro prodotto: si no hay bolsitas, en ese ciclo la astucciadora no tomará la caja, no activará los spintori y no accionará la impresora ni las pistolas de cola.
+El nastro prodotto se mueve de forma intermitente (se detiene en cada ciclo de la astucciadora para permitir las operaciones de inscatolamento).
+
+2.10.2 RACCOLTA ASTUCCI:
+Permite tomar una caja no formada a la vez y posicionarla en la cadena de composición.
+"Catena astucci": nastro donde se posicionan las cajas no formadas (con el código de barras hacia el interior de la astucciadora). La fotocélula detecta la disponibilidad de cajas; si no hay cajas → señaliza aviso en panel + parpadeo amarillo del semáforo + sonido intermitente (la máquina puede continuar varios ciclos más).
+La última parte del nastro está inclinada 45° hacia abajo para permitir que la rueda de prelevamiento tome una sola caja a la vez.
+Lector de código de barras verifica que las cajas en el nastro sean compatibles con el formato/receta actual.
+Rueda de prelevamiento: disco rotante con dos brazos (2 tubos + ventosa cada uno). Mediante efecto venturi, toma una caja no formada de la catena astucci y la lleva a la catena di composizione, plegando ya dos lados de la caja.
+
+2.10.3 SEZIONE INSCATOLAMENTO:
+Permite el inscatolamento de los grupos de bolsitas del nastro prodotto.
+El grupo de bolsitas (ya en el número previsto para el formato: ej. 50 bolsitas para caja de 50) es sostenido en posición por dos placas metálicas comandadas por cilindros neumáticos. Simultáneamente llega la caja ya formada en 4 lados.
+Entran en función los spintori interno y externo:
+- Spintore interno (dentro del chasis): realiza el empuje real de las bolsitas
+- Spintore externo: aplica presión leve al grupo de bolsitas para mantenerlas compactas; gracias a la ventosa y el efecto venturi las arrastra al interior de la caja
+El movimiento de ambos spintori es coordinado para trabajar simultáneamente.
+Una vez finalizado el desplazamiento, los spintori vuelven a posición 0, y una placa metálica neumática evita que las bolsitas salgan mientras acompaña la caja hasta el plegado del lado inferior.
+
+2.10.4 CATENA DI COMPOSIZIONE:
+Secuencia completa de 14 pasos (un paso de la catena = un ciclo de la astucciadora):
+
+1. Arrivo astuccio no formado (si hay bolsitas en el nastro prodotto) + plegado por los lados longitudinales
+2. Plegado de patas laterales superiores + verificación presencia astuccio y pliegue patas vía fotocélulas
+3. Inscatolamento de bolsitas del nastro prodotto + plegado pata lateral inferior
+4. Plegado de la otra pata lateral inferior
+5. Posicionamiento pata inferior para impresión
+6. Impresión (láser) en la pata inferior (configuraciones desde panel operador o panel de impresora)
+7. Encolado de patas inferiores + plegado de patas superiores
+8. Encolado y cierre de patas superiores
+9/10/11. Pasaje entre nastros verticales (mantiene cerradas las patas mientras se seca la cola)
+12. Control de encolado y plegado de patas (fotocélulas) + verificación de impresión (cámara)
+13. Estación de descarte: si la caja no está cerrada/encolada/impresa correctamente → la saracinesca (compuerta guillotina) se eleva y deja pasar la caja "no ok" para descartarla. Fotocélula confirma el paso. Si OK → saracinesca permanece abajo, detiene la caja, y el spintore la envía al nastro di uscita.
+14. Nastro di uscita: las cajas llenas, cerradas correctamente e impresas son empujadas por el spintore sobre este nastro que las transporta a la salida.
+
+Dos barras longitudinales mantienen el astuccio en posición durante todo el recorrido de la catena; pueden elevarse solo para mantenimiento (no durante operación normal).
+
+2.10.5 INTERNO MACCHINA ASTUCCIATRICE:
+Contiene todos los motores de movimentación, ejes de transmisión, correas y levas mecánicas. También es donde corre el spintore interno durante las fases de trabajo.
+
+2.10.6 STAMPANTE:
+Permite imprimir varias líneas de caracteres en el fondo de las cajas (normalmente fecha y lote de producción). Las configuraciones pueden modificarse desde su panel o desde el panel operador. Referirse al manual de la impresora.
+
+2.10.7 MACCHINA DELLA COLLA:
+Gestiona el calentamiento de la cola para mantenerla líquida y el accionamiento de las pistolas para aplicarla en la caja. Referirse al manual de la máquina de cola.
+
+2.10.8 SEZIONE DI SCARTO:
+Compuesta por una saracinesca (normalmente bajada) y un spintore.
+- Si la caja NO está correctamente cerrada, encolada o impresa → señal de descarte → la saracinesca se eleva y deja pasar la caja "no ok"; fotocélula confirma el paso y ordena volver a bajar la saracinesca.
+- Si la caja SÍ está correctamente en parámetros → la saracinesca permanece abajo, detiene la caja, y el spintore la envía al nastro di uscita.
+
+=== CAPÍTULO 3 – PANEL DE OPERADOR ===
+
+--- 3.1 INTRODUCCIÓN ---
+El panel permite al operador interactuar con la máquina de forma práctica y rápida.
+La estructura del panel tiene un brazo mecánico que permite mover y rotar el panel para adaptarlo a las necesidades del operador.
+El panel se compone de:
+- Display touch screen
+- Sección de teclas funcionales de base
+En esta máquina hay DOS paneles: uno para la confeccionadora y otro para la astucciadora.
+
+--- 3.2 PANEL OPERADOR CONFECCIONADORA ---
+
+3.2.1 TECLAS FÍSICAS:
+
+START (led verde circular):
+- LED FIJO verde: se puede poner en marcha la máquina
+- LED PARPADEANTE verde: la máquina ya está en marcha
+- LED APAGADO: NO se puede poner en marcha (apagada, emergencia, modo manual o alarma)
+Para arrancar: una vez completado el homing (todos los ejes se ubican en posición de referencia), se puede poner en producción.
+
+STOP (led rojo, siempre encendido salvo máquina apagada):
+Detiene la máquina "en fase": la máquina completará 2 ciclos más y se detendrá en posición 0 (igual que al terminar el homing), lista para reiniciar.
+
+RESET (led azul):
+Resetea la máquina cuando está en estado de alarma o emergencia, iniciando el proceso de homing.
+⚠️ IMPORTANTE: La máquina DEBE resetearse en cada encendido.
+
+INCHING (led blanco):
+Funciona cuando la máquina está en modo manual. Manteniendo presionado, se mueven los distintos ejes a velocidad reducida.
+
+EMERGENCY (seta de emergencia):
+Pone la máquina en modo emergencia: detención inmediata, corta potencia a todos los motores y purga el circuito neumático. Para restaurar: se requiere la llave correspondiente. Luego del restablecimiento → es necesario un reset de la máquina.
+
+MAINTENANCE (selector):
+Activa el modo manual para operaciones de mantenimiento (ej: cambio de bobina).
+Al volver a modo automático → se ejecuta un homing automático de todos los ejes.
+
+DOSER UP/DOWN (selector):
+- UP: el dosador sube a posición superior; NO es posible habilitar el funcionamiento (sin dosada). Requerido para el homing de la máquina.
+- DOWN: el dosador baja a posición "en línea" (posición de dosada), en espera de habilitación desde display.
+
+USB: Toma USB 3.0 para guardar y descargar datos (recetas, database, lotes) en memoria USB.
+
+RILEVATORE IMPRONTE DIGITALI: Para registrar huellas digitales de usuarios. Permite acceso al display sin username/password.
+
+--- 3.3 DISPLAY TOUCH SCREEN ---
+
+PANTALLA DE PRESENTACIÓN: aparece al encender; presionar "Enter" para acceder a la pantalla principal.
+
+LAYOUT GENERAL DE PÁGINAS:
+1. Barra superior (zona roja dashed): Estado de la máquina
+2. Barra lateral (zona azul dashed): Habilitaciones
+3. Menú lateral (desplegable)
+4. Sección de contenido de páginas
+
+3.3.1 BARRA SUPERIOR – ESTADO DE MÁQUINA:
+
+EMERG (Emergencia):
+- ROJO: máquina en emergencia
+- VERDE: no hay emergencia
+
+DOORS (Puertas):
+- ROJO: una o más puertas abiertas
+- VERDE: todas las puertas correctamente cerradas
+
+MANUAL:
+- ROJO: máquina en modo manual
+- VERDE: máquina NO en modo manual (automático)
+
+AIR (Aire comprimido):
+- ROJO: falta aire comprimido
+- VERDE: aire comprimido presente
+
+REEL (Bobina):
+- ROJO: bobina terminada
+- ROJO PARPADEANTE: bobina por terminar
+- VERDE: bobina tiene suficiente material
+
+TIMING (Homing/Azzeramento):
+- GRIS: azzeramento no ejecutado
+- ROJO PARPADEANTE: producto por terminar [nota: texto original del manual]
+- VERDE PARPADEANTE: azzeramento en curso
+- VERDE: azzeramento ejecutado correctamente
+
+ALARME: Parpadea cuando ocurre un problema. Es clickeable y abre la página de alarmas.
+
+MENÚ: Abre/cierra el menú lateral de navegación.
+
+PAGINA ATTUALE: Muestra el nombre de la página abierta + flechas de navegación secuencial.
+
+BARRA SUPERIOR (superior derecho): Muestra nombre del lote en curso + fecha y hora actual.
+
+3.3.2 BARRA LATERAL – HABILITACIONES:
+
+LOGIN OPERATORE: Clic en el ícono para abrir la ventana de gestión de usuario. Una vez logueado, muestra nombre y nivel de acceso.
+
+HABILITACIONES (botones se vuelven verdes cuando están activos):
+- MARK (tacca): habilita la lectura de la fotocélula de tacca para centrado correcto de la bolsita
+- DOSER: habilita el dosador (también hay habilitaciones específicas dentro de las páginas del dosador; todas deben estar activas para funcionamiento completo). Verde = dosador activo y funcionando.
+- HEATERS: habilita el calentamiento de rulli y ganasce para soldadura. Verde = termoresistencias habilitadas y en temperatura. Rojo = resistencias habilitadas pero NO en rango de temperatura configurado.
+- ROT.KNIVES: habilita las cuchillas rotantes para corte vertical (antes de los rodillos). Verde = cuchillas habilitadas.
+- ASPIRATORS (opcional): habilita aspiradores de polvo. Verde = activo.
+- PRINTER: habilita el movimiento de las cabezas de impresión y el envío de señales a la impresora (hay otra habilitación en la página de impresora; ambas deben estar activas). Verde = impresora habilitada y lista. Verde parpadeante = ejecutando homing. Rojo = no habilitada o sin homing.
+- VISION: habilita el sistema de cámaras/lector de código de barras. Verde = activo. (Hay habilitaciones adicionales en la página específica con acceso al programa VisionView.)
+- REEL (bobina + flechas): habilita el alineamiento automático del film. Verde = papel alineado. Verde parpadeante = motores alineando la bobina. Rojo = problema en el alineamiento (se llega al límite máximo → alarma "Allineamento massimo raggiunto"). Las flechas permiten el alineamiento manual (referencia: vista frontal de la máquina).
+
+3.3.3 MENÚ LATERAL (navegación rápida entre páginas):
+- MANAGEMENT: gestión de datos e impostaciones del panel
+- MAIN: página principal con datos más importantes de funcionamiento
+- DOSER: página principal del dosador (submenú con subpáginas)
+- KNIFE: página del cuchillo (también configuraciones de strip y pre-corte si aplica)
+- PRINTER: página de la impresora (habilitación adicional para impresión)
+- MARK: configuraciones de tacca y giunzione del film (también cámaras/lector si aplica)
+- HEATERS: configuraciones de secciones saldantes (rulli y ganasce)
+- PACKING: configuraciones de deviador y nastro de salida (también campionamento si aplica)
+- MECH.SET: página de configuraciones mecánicas
+
+3.3.4 SECCIÓN DE CONTENIDOS – PÁGINAS DE PRODUCCIÓN (AZUL):
+
+PÁGINA MAIN:
+Primera página al presionar Enter. Datos principales:
+
+MACHINE SPEED:
+- Set: velocidad de producción (ciclos/minuto). Multiplicar por nº de pistas = bolsitas/minuto
+- Actual: ciclos actuales (también legible en el "tachímetro")
+- Seal Speed Ratio: ajuste % de velocidad de las ganasce en fase de soldadura, relativo a la velocidad de avance del papel. La velocidad de las ganasce DEBE ser mayor a la velocidad del papel para una soldadura transversal correcta y para evitar que el papel se atasque.
+
+BAG LENGTH:
+- Set: longitud configurada de la bolsita
+- Actual: longitud de la bolsita leída por la fotocélula de tacca
+- SET as ACTUAL: una vez configurada una longitud en "Set", presionar este botón para definirla
+
+COUNTERS:
+- Total Cycles: número total de ciclos ejecutados
+- Partial Cycles: número parcial de ciclos ejecutados
+- Filled Cycles: número de ciclos con bolsitas dosadas
+- Empty Cycles: número de ciclos con bolsitas vacías
+
+ACTUAL TEMPERATURES:
+- Rolls Left/Right: temperatura actual del rodillo izquierdo/derecho
+- Jaws Left/Right: temperatura actual de la mordaza izquierda/derecha
+
+PÁGINA DOSER:
+Página principal del dosador. Desde aquí se accede a subpáginas via menú vertical.
+
+POWDER DOSER (subpágina principal):
+Tabla para modificar parámetros de cada pista individualmente:
+- Quantity (giros/turns): número de vueltas de coclea por dosada
+- Speed (RPM): velocidad de rotación a régimen
+- Acc (RPM/s): rampa de aceleración para alcanzar la velocidad configurada
+- Dec (RPM/s): rampa de deceleración para detenerse
+- Torque Set (Nm): torque máximo alcanzable configurado
+- Torque Act (Nm): torque actual (mantiene en memoria el pico máximo del último ciclo)
+- Duration (ms): duración de la dosada del último ciclo ejecutado
+- Dosing phase (%): fase de dosada respecto al ciclo máquina
+- Dosing time: tiempo de dosada
+
+Botones de la página Powder Doser:
+- DOSER ENABLE: habilita el dosador (verde = activo)
+- CUT-OFF ENABLE: habilita el movimiento del cut-off (verde = activo)
+- CUT-OFF SETTINGS: abre página de configuraciones del cut-off
+- BALANCE SETTINGS: abre página de configuraciones de la balanza
+- DOSER TEST: ejecuta una dosada individual (solo para testing). Verde durante la ejecución.
+- 1, 2, 3.. 10: habilitación pista por pista de cada vite a coclea individual
+
+CUTT-OFF SETTINGS (subpágina, accesible solo desde Powder Doser):
+- Homing off-set: offset de posición del cut-off en grados
+- Position: posición del cut-off durante la dosada en grados
+- Speed (deg/s): velocidad de movimiento del cut-off
+- Acceleration (deg/s²): rampa de aceleración para alcanzar la velocidad configurada
+- Cut-off delay (ms): retardo de accionamiento del cut-off
+- Botón HOMING: solicita la ejecución del homing del eje cut-off. Verde = homing ya ejecutado correctamente.
+
+BALANCE SETTINGS (subpágina):
+- Correction ratio: valor de corrección de la velocidad de rotación de las vites del dosador, determinado por la diferencia de peso que la balanza detecta (entre peso configurado y peso real de las bolsitas analizadas)
+- Min value: valor mínimo de giros por dosada de las vites alcanzable por la corrección de la balanza
+- Max value: valor máximo de giros por dosada alcanzable por la corrección de la balanza
+
+POWDER OPTIONAL (subpágina):
+- TUBES vibrator delay (ms): retardo de vibración de los tubos del dosador
+- TUBES vibrator duration (ms): duración de vibración de los tubos del dosador
+- TUBES VIBRATION ENABLE: habilita la vibración de los tubos (verde = activo)
+- FLUSHED SEAL 1/2 ENABLE: habilita el aire flussado 1/2 (verde = activo)
+
+AGITATOR (subpágina):
+- Speed AGITATOR 1 (Hz): velocidad del agitador en la primera tolva
+- Speed AGITATOR 2 (Hz): velocidad del agitador en la tolva con las vites de dosada
+- ENABLE: habilita el movimiento del agitador (verde = activo)
+- MODE RUN: ALWAYS (siempre activo si habilitado) / with DOSER (solo activo con dosador activo)
+
+LINE (subpágina):
+- Reel actual diameter (mm): diámetro actual de la bobina
+- Pre end of reel diameter (mm): diámetro para la advertencia preventiva de fin de bobina
+- Doser in line time (ms): tiempo que el dosador permanece en línea una vez detenida la máquina
+
+PÁGINA KNIFE:
+- PULLING ROLLERS → AUTO: habilitación de los rulli di traino pre y post corte
+- VERTICAL KNIFE – Knife speed ratio (%): incremento de velocidad respecto a la carrera normal del cuchillo para un corte más homogéneo
+- CUT KNIFE – Knife phase (mm): fase de corte transversal respecto a la soldadura
+
+PÁGINA PRINTER:
+PRINTER SETTINGS:
+- Printer phase (%): fase de impresión respecto al ciclo de la máquina
+- Printer ON time (ms): tiempo de activación de la señal de impresión
+
+PRINTER MOTIONS:
+- Start position (mm): posición de inicio de impresión respecto al inicio de la carrera del carrito
+- End position (mm): posición de fin de impresión
+- Speed (mm/s): velocidad del carrito durante la impresión
+- Acceleration (mm/s²): aceleración del carrito para alcanzar la velocidad de impresión
+
+Botones:
+- ENABLE: habilitación de impresión (verde = activo)
+- HOMING: solicita homing del carrito de impresión. Gris = no ejecutado; verde = ejecutado; verde parpadeante = en curso.
+
+PÁGINA MARK AND VISION:
+FILM JOINT SETTINGS:
+- Film joint wait cycles: número de ciclos que la máquina espera desde que detecta la giunzione hasta comenzar a descartar
+- Film joint reject cycles: número de ciclos a descartar (después de los wait cycles) antes de volver a línea
+- FILM JOINT (botón): habilita la detección de giunzione del film (verde = activo)
+
+MARK FUNCTIONS:
+- Mark phase detection (mm): fase de lectura de la tacca
+- Phase limit value (mm): límite de fase de lectura de la tacca
+- Actual bag length (mm): longitud actual de la bolsita detectada por la tacca
+- Actual mark position error (mm): error actual de la tacca
+
+CAMERA SETTINGS:
+- Group 1 phase (%): fase de activación del control de cámaras
+- ENABLE: habilita el control de cámaras (verde = activo)
+- OPEN VISIONVIEW: abre el programa de gestión de cámaras
+
+BARCODE SETTINGS:
+- Phase (%): fase de control del código de barras
+- ENABLE: habilita el control del código de barras
+
+PÁGINA HEATERS:
+Todas las configuraciones de temperatura y presión de las estaciones saldantes:
+- Rolls/Jaws Range limit set (°C): límite de oscilación de los valores individuales de temperatura configurados (Drop down Rolls / Drop down Jaws)
+
+ROLLS LEFT:
+- Temperature Set (°C): configuración de temperatura del rodillo izquierdo
+- Temperature Act (°C): valor actual de temperatura del rodillo izquierdo
+- Inside Pressure Set (kg): referencia de presión entre rodillos hacia el interior de la máquina (para alarma de sobre/sub presión)
+- Inside Pressure Act (kg): valor actual de presión interior
+
+ROLLS RIGHT:
+- Temperature Set/Act (°C): temperatura del rodillo derecho
+- Outside Pressure Set/Act (kg): presión entre rodillos hacia el exterior de la máquina
+
+JAWS LEFT:
+- Temperature Set/Act (°C): temperatura de la mordaza izquierda
+- Inside Pressure Set/Act (kg): presión entre mordazas hacia el interior
+
+JAWS RIGHT:
+- Temperature Set/Act (°C): temperatura de la mordaza derecha
+- Outside Pressure Set/Act (kg): presión entre mordazas hacia el exterior
+
+PÁGINA PACKING:
+UPPER DEVIATOR SETTINGS:
+- Online cycles: ciclos antes de desviar las bolsitas a línea desde que entra en función el dosador
+- Online phase (mm): fase de cambio entre descarte y en-línea
+- Offline cycles: ciclos antes de ir offline desde que las bolsitas no están dosadas
+- Offline phase (mm): fase de cambio entre en-línea y descarte
+
+SAMPLING (campionamento):
+- Sampling interval (ciclos): número de ciclos entre un muestreo y otro
+- Sampling cycles (ciclos): número de ciclos de muestreo
+- Cycles to Sampling: countdown de ciclos hasta el próximo muestreo
+- Bags check start phase (%): fase de inicio del control de bolsitas
+- Bags check stop phase (%): fase de fin del control de bolsitas
+
+PÁGINA MECHANICAL SETTINGS:
+Página para registrar las configuraciones mecánicas de la máquina:
+- Photocell position for reel centering (nr): posición de las fotocélulas para centrado del papel
+- Paper divider position (nr): posición del divisor del papel
+- Unwinder dancing Roller pressure (MPa): presión del eje ballerino del svolgibobina
+- Rotating knife position for paper division (nr): posición del cuchillo rotativo para la división central del papel
+- Rotating knife pressure for paper division (MPa): presión del cuchillo rotativo
+- Upper pulling rollers Inside/Outside cylinder pressure (MPa): presión del cilindro (interior/exterior) de los rulli stacca-buste superiores
+- Knife inside/outside pressure (mm): presión del contracuchillo (interior/exterior)
+- Lower pulling rollers Inside/Outside cylinder pressure (MPa): presión del cilindro (interior/exterior) de los rulli stacca-buste inferiores
+
+--- PÁGINAS DE GESTIÓN (ROJO – MANAGEMENT) ---
+
+PÁGINA RECIPES (Recetas):
+- ACTUAL RECIPE: número y nombre de la receta actualmente activa
+- RECIPE FILE: número y nombre del archivo a guardar/cargar
+- SAVE TO FILE: guarda las configuraciones actuales con el número y nombre configurado
+- LOAD FROM FILE: carga las configuraciones del archivo seleccionado
+- DELETE FILE: elimina el archivo seleccionado
+- PREVIOUS/NEXT FILE: navega entre archivos
+- RECIPES BACKUP: hace backup de la receta seleccionada
+
+PÁGINA DATABASE:
+- DATABASE VIEWER: visualiza en pantalla los datos registrados por la máquina separados por tipo (alarmas, cambios de seteos mecánicos, operaciones de login/logout, contadores). Cada fila = una variación; incluye fecha/hora, usuario, valor anterior, valor actual, nombre y descripción de la variable.
+- DATABASE BACKUP: hace backup del database en USB (solo si la memoria está conectada; botón se vuelve verde)
+- LOT SETTINGS: abre la gestión de lotes
+
+FINESTRA LOT (gestión de lotes):
+- LOT START: inicia un nuevo lote (requiere escribir el número de lote; no puede haber un lote activo)
+- LOT END: cierra el lote activo, guarda los datos y crea archivos PDF
+- LOT LIST: lista de todos los lotes ejecutados y guardados
+- CLOSE: cierra la ventana
+
+PÁGINA LOT LIST:
+Lista de todos los lotes; seleccionando uno se ven sus características (inicio, fin, nombre, descripción).
+- LOT DATABASE VIEW: muestra los datos solo del lote seleccionado
+- EXPORT on USB: exporta datos del lote a USB
+- DELETE: elimina el lote seleccionado
+
+PÁGINA COUNTER:
+- Tornado Machine ON time (min): tiempo de encendido de la máquina
+- Tornado Machine RUNNING time (min): tiempo de funcionamiento de la máquina
+- Tornado heaters RUNNING time (min): tiempo de funcionamiento de las estaciones de soldadura
+- Tornado doser RUNNING time (min): tiempo de funcionamiento del dosador
+TOTAL COUNTERS: Total, Filled, Empty (todos los ciclos históricos)
+PARTIAL COUNTERS: Total, Filled, Empty (desde el último reset; botón RESET los borra)
+
+PÁGINA GLOBAL SETTINGS:
+- DATE AND TIME: HMI Date & Time (actual del panel), Date/Time (para configurar), "Set HMI Time" (guarda), Motion Controller Date & Time (sincronizar con HMI via "Sync with HMI")
+- LANGUAGE SELECTION: elige el idioma del panel (inglés, italiano, portugués, español)
+
+PÁGINA DOCUMENTS:
+Acceso a manuales, esquemas eléctricos, lista de repuestos.
+⚠️ Cuando se abre esta página, NO se visualizan la barra superior, barra lateral ni menú lateral → no se puede ver el estado de la máquina, las habilitaciones ni acceder a otras páginas (incluso alarmas) hasta cerrar esta página.
+
+--- PÁGINAS ESPECIALES ---
+
+PÁGINA ALARMS:
+Lista de todos los alarms que ocurrieron, en orden cronológico inverso (más reciente primero).
+Cada fila: descripción del alarm, hora de ocurrencia, estado (ON u OFF).
+⚠️ Cuando está abierta, NO se pueden abrir otras páginas hasta cerrar con BACK. Sí se puede ver el estado de la máquina y las habilitaciones.
+- ALARMS RESET: resetea los alarmas; hacerlo cada vez que se resuelve un problema para verificar que el alarm ya no esté activo.
+- CLEAR ALL ALARMS: borra todos los alarmas NO activos de la tabla (quedan registrados en Database-Alarms).
+- HELP: abre una ventana de soporte al seleccionar un alarm, que ayuda a comprender y resolver el problema.
+
+PÁGINA MANUAL:
+Se abre automáticamente cuando se activa el modo manual. Informa al operador sobre los riesgos. "Exit" mantiene el modo manual activo y vuelve a la interfaz normal.
+Estado visible: ícono MANUAL en rojo en la barra superior; led blanco del INCHING encendido.
+Al volver a automático → homing automático de todos los ejes.
+
+PÁGINA UPS ACTIVE:
+Se abre automáticamente cuando el selector de encendido se pone en OFF. La máquina inicia el procedimiento de apagado, manteniendo el sistema activo (no la parte de potencia) por 2 minutos gracias al UPS. Muestra countdown hasta el apagado completo.
+
+--- GESTIÓN DE USUARIOS Y LOGIN ---
+Para modificar y visualizar la mayoría de los parámetros, es necesario hacer login con una cuenta. Cada cuenta tiene un nivel de acceso determinado.
+
+Para hacer LOGIN: presionar en la esquina superior izquierda (riquadro Login Operatore). Opciones:
+- Insertar Username y Password
+- "Fingerprint access" para acceso con huella digital (requiere registro previo)
+
+Para ver la contraseña mientras se tipea: presionar el ícono de ojo en la barra de digitación.
+
+Registro de huella digital: acción disponible desde la pantalla después de hacer login como nivel 5. Seleccionar usuario → "Finger print" → "ACQUIRE" → seguir instrucciones → posicionar el dedo hasta señal acústica → repetir 3 veces. El círculo seleccionado se vuelve verde al guardar.
+
+Como crear una cuenta: requiere nivel 5. Desde el Login logueado → USER MANAGER → +Group (crear grupo) → +User (crear usuario). Configurar: nombre de grupo, credenciales, AutoLogOFF (tiempo de inactividad), Expiring password (días). Confirmar con "Confirm".
+
+--- 3.4 PANEL OPERADOR ASTUCCIADORA ---
+El panel de la astucciadora se diferencia principalmente en las funciones e impostaciones de la máquina; la sección de gestión de datos, usuarios y páginas especiales es igual.
+
+PÁGINA MACHINE STATUS (Remote):
+Página principal de la astucciadora.
+
+MACHINE SPEED:
+- Tornado speed (bolsitas/min): velocidad de producción de la confeccionadora
+- Cartoning Machine speed (cajas/min): velocidad de la astucciadora
+- Nr of bags per display: número de bolsitas por caja
+- Main master position (deg): fase actual del ciclo de la astucciadora
+- Buffer actual counter / Buffer set counter: bolsitas presentes/configuradas en el buffer
+- Stacker actual counter / Stacker set counter: bolsitas presentes/configuradas en los stackers
+
+MACHINE COUNTERS:
+- Cartoning machine ON time (min): tiempo de encendido de la astucciadora
+- Cartoning machine Running time (min): tiempo de funcionamiento
+- Filled displays partial counter: contador parcial de cajas llenas
+- Filled displays total counter: contador total de cajas llenas
+
+PÁGINA MACHINE STATUS (Local):
+Igual que la anterior + Local speed set: configuración de velocidad para funcionamiento en modalidad local.
+
+PÁGINA INTERFACE SETTINGS:
+INFEED SETTINGS:
+- Infeed belt speed set (Hz): velocidad de los cinghioli
+- Infeed belt stop delay (ms): retardo de parada de la cinta de infeed
+Submenús: BUFFER, STACKERS, TRANSPORT/PUSHER SETTINGS, COMPOSER SETTINGS
+
+=== TABLA COMPLETA DE ALARMAS ===
+
+--- ALARMAS DE SOBRECARGA (OVERLOAD) ---
+OVERLOAD RELAY: Relés de motores AC absorbieron corriente excesiva → Verificar cuál relé está apagado, reponerlo y verificar el motor conectado (revisar absorción de corriente).
+IONIZER OVERLOAD: Interruptor de circuito disactivado por absorción anómala → Verificar interruptor automático, reponerlo y controlar dispositivo conectado (revisar conexiones).
+REEL ALIGNMENT SYSTEM OVERLOAD: Interruptor desactivado por absorción anómala → Verificar interruptor automático, reponerlo y controlar dispositivo (revisar problemas mecánicos).
+EXIT BELT OVERLOAD OR INVERTER ALARM: Interruptor automático o inverter en alarma → Verificar interruptor automático e inverter. Revisar problemas mecánicos en el dispositivo.
+UNWINDER OVERLOAD OR INVERTER ALARM: Interruptor automático o inverter en alarma → Verificar interruptor automático e inverter. Revisar problemas mecánicos.
+PSU OVERLOAD: Interruptor disactivado por absorción anómala → Verificar interruptor automático, reponerlo y controlar dispositivo (revisar mecánica).
+HEATERS OVERLOAD: Interruptor automático disactivado por absorción anómala → Verificar interruptor automático, reponerlo y controlar dispositivo.
+ASPIRATORS OVERLOAD: Interruptor automático disactivado por absorción anómala → Verificar interruptor, reponerlo y controlar dispositivo.
+HOPPER AGITATOR OVERLOAD: Interruptor automático disactivado por absorción anómala → Verificar interruptor, reponerlo y controlar dispositivo.
+
+--- ALARMAS ACUMULATIVAS (CUMULATIVE) ---
+FILM CUMULATIVE: Motor de avanzamiento del film funcionando a tensión demasiado alta → Verificar el drive y referirse al manual. Si persiste, contactar BOATO PACK o servicio SBC local.
+KNIFE CUMULATIVE: Motor o drive de la cuchilla de corte en alarma → Verificar drive y referirse al manual. Si persiste, contactar BOATO PACK o PARKER SBC Service.
+JAWS CUMULATIVE: Motor de las mordazas funcionando a tensión demasiado alta → Verificar drive y referirse al manual. Si persiste, contactar BOATO PACK o servicio SBC.
+PRINTER CUMULATIVE: Unidad de impresión en alarma → Verificar impresora y referirse al manual correspondiente.
+STRIP CUMULATIVE: Motor o drive de la cuchilla de strip en alarma → Verificar drive y referirse al manual. Si persiste, contactar BOATO PACK o PARKER SBC Service.
+UNWINDER CUMULATIVE: Motor o drive del desbobinador en alarma → Verificar drive y referirse al manual. Si persiste, contactar BOATO PACK.
+WT PUSHER CUMULATIVE: Motor o drive del empujador WT en alarma → Verificar drive y referirse al manual. Si persiste, contactar BOATO PACK.
+POWDER DOSER CUMULATIVE: Motor o drive del dosificador de polvos en alarma → Verificar drive. Si persiste, contactar BOATO PACK.
+LIQUID DOSER CUMULATIVE: Motor o drive del dosificador de líquidos en alarma → Verificar drive. Si persiste, contactar BOATO PACK.
+INFEED CUMULATIVE: Motor o drive de la cinta INFEED en alarma → Verificar drive. Si persiste, contactar BOATO PACK.
+
+--- ALARMAS DE SEGURIDAD ---
+SAFETY DOORS OPEN (1,2,3..): Una o más puertas de acceso están abiertas → Verificar cierre correcto de puertas. Verificar funcionamiento de sensores. Verificar sistema de seguridad.
+EMERGENCY BUTTON PRESSED: Uno o más botones de emergencia presionados → Verificar estado de los botones y reponerlos usando la llave correspondiente. Verificar sistema de seguridad.
+SAFETY KEY OPEN: Portezuela de seguridad del desbobinador abierta → Cerrar portezuela y verificar su funcionamiento. Verificar sistema de seguridad.
+EMERGENCY CIRCUIT NOT INSERTED: Dispositivo de gestión de seguridad indica que el circuito no está cerrado → Verificar estado del circuito de seguridad (puertas, botones de emergencia, dispositivos de control).
+
+--- ALARMAS DE MOVIMIENTO/POSICIONAMIENTO ---
+JAWS PROXIMITY DETECTION MISSING: Fotocélula no detectó la tacca por 5 veces consecutivas → El material no está en posición correcta o la fotocélula está sucia/lente cubierta. Consultar manual fotocélula SICK.
+UPPER/LOWER DEVIATOR ALARMS: Sensor de proximidad no detectó cambios de estado al activar el desviador → Controlar cilindro neumático, sensor de proximidad y electroválvula del desviador.
+STRIP MOVEMENT TIMEOUT: Movimiento de la cuchilla de strip demasiado lento → Verificar correcto funcionamiento del motor y sensores.
+KNIFE MOVEMENT TIMEOUT: Movimiento de la cuchilla demasiado lento → Verificar funcionamiento del motor y sensores de detección.
+JAWS MOVEMENT TIMEOUT: Movimiento de las mordazas demasiado lento → Verificar funcionamiento del motor y sensores de detección.
+REEL CENTERING LIMIT REACHED: El grupo desbobinador llegó al límite del rango de movimiento de centraje → Mover manualmente con los botones manuales del panel. Posicionar correctamente la fotocélula de alineamiento. Verificar sensor de centraje.
+FILM UNWINDER SPEED TOO LOW: El rodillo ballerino llegó a la posición más alta → Controlar el desbobinador. Verificar pasaje del material de embalaje.
+FILM BROKEN: El rodillo ballerino llegó a la posición más baja → Controlar el desbobinador y el pasaje del material. Verificar posición del ballerino y sensor lineal.
+KNIFE/JAWS/FILM/STRIP OVERSPEED: Sensores detectaron rotación con velocidad superior a la permitida en modo manual → Controlar sensores de proximidad para overspeed (posición: 0,3 mm de la leva). Verificar motor y drive.
+
+--- ALARMAS DE TEMPERATURA ---
+LEFT/RIGHT ROLL TEMPERATURE: Control de temperatura detectó funcionamiento anómalo del sensor o calentador → Verificar sensor de temperatura y calentador.
+LEFT/RIGHT JAWS TEMPERATURE: Idem para las mordazas → Verificar sensor de temperatura y calentador.
+TEMPERATURE OUT OF RANGE: Temperatura fuera del rango máximo permitido → Esperar que mordazas y rodillos alcancen la temperatura configurada. Controlar el set de temperaturas. Verificar termocuplas y resistencias.
+THERMOREGULATORS COMMUNICATION ERRORS: Termorreguladores no comunican con la unidad de control → Verificar conexión entre termorreguladores y unidad de control.
+LEFT/RIGHT ROLL/JAWS TEMPERATURE SENSOR: Problema en el sistema de detección de temperatura → Verificar integridad del sensor y conexión. Verificar todos los cables eléctricos desde el sensor hasta el tablero eléctrico.
+
+--- ALARMAS DE FUNCIONAMIENTO DE MÁQUINA ---
+AIR LOW PRESSURE: Presión del aire comprimido baja → Controlar manómetro en la entrada de aire (debe indicar 6 bar). Verificar posibles pérdidas por tubos sueltos o dañados.
+END OF REEL: Film de la bobina terminado → Sustituir la bobina. Controlar posición y conexiones eléctricas del sensor.
+MARK DETECTION MISSING: Fotocélula no detectó la tacca por 5 veces consecutivas → El material no está en posición correcta o fotocélula sucia/lente cubierta. Consultar manual fotocélula SICK.
+SACHET JAM ON EXIT BELT: Una o más bolsitas faltantes en la cinta de salida → Controlar si hay bolsitas atascadas en la cuchilla, desviadores o toboganes de salida.
+PRINTER ALARM: La impresora está en alarma → Verificar impresora y referirse al manual correspondiente.
+BAG LENGTH DIFFERENCE TOO HIGH: Fotocélula detectó longitud de bolsita muy diferente al valor configurado → La fotocélula no está alineada con la tacca (detecta marcas falsas). Controlar el valor configurado en el panel de longitud de bolsita.
+FILM JOINT DETECTED: Fotocélula detectó una unión en el film → Descartar las bolsitas producidas con la unión del film.
+MARK OUT OF ALLOWED RANGE: Fotocélula detectó una tacca muy diferente a la esperada → Fotocélula no alineada con la tacca. Consultar manual fotocélula SICK.
+
+--- ALARMAS DOSIFICADOR DE POLVOS ---
+AGITATOR OVERTORQUE: El agitador superó el límite máximo de par → Verificar motor y agitador. Revisar impedimentos mecánicos. Verificar drives.
+AUGER TORQUE: El tornillo dosificador superó el límite máximo de par → Verificar motor y tornillo. Revisar impedimentos mecánicos. Verificar drives.
+POWDER DOSER OUT OF LINE: Dosificador habilitado pero fuera de línea → En movimiento manual: mover dosificador a línea. En movimiento automático: controlar sistema de movimentación.
+POWDER DOSER HOMING TIMEOUT: Movimiento de homing del dosificador superó el tiempo máximo → Verificar drive, motor, transmisiones mecánicas y sensor de proximidad de homing.
+
+--- ALARMAS DOSIFICADOR DE LÍQUIDOS ---
+LIQUID DOSER HOMING TIMEOUT: Movimiento de homing del dosificador superó el tiempo → Verificar drive, motor, transmisiones mecánicas y sensor de homing.
+DCP DOSER TORQUE: Par del motor superó el límite permitido → Verificar motor, drive, cables e impedimentos mecánicos. Revisar el recorrido.
+DCP MOTOR: Motor o drive dosificador DCP en alarma → Verificar drive y referirse al manual. Si persiste, contactar BOATO PACK.
+
+--- ALARMAS TABLERO ELÉCTRICO ---
+INVERTER ALARM: Un inverter está en alarma → Controlar inverters y referirse al manual según el código de alarma.
+ELECTRIC BOARD TEMPERATURE: Temperatura dentro del tablero superó el umbral → Controlar filtros de aire del acondicionador y limpiarlos o sustituirlos. Controlar configuración del sensor térmico (50°C).
+POWER SUPPLY PHASE SWAPPED: Las fases de alimentación no están conectadas correctamente → Apagar la máquina y conectar correctamente las fases de alimentación.
+DRIVES POWER ALARM: Unidad de alimentación de los motores en alarma → Verificar interruptor automático, reponerlo y controlar el dispositivo.
+
+=== PROCEDIMIENTOS DE OPERACIÓN (del manual de uso) ===
+
+ENCENDIDO DE MÁQUINA:
+1. Conectar el tubo de aire a la válvula de entrada
+2. Girar el interruptor principal a ON
+3. Hacer login en el panel
+4. Presionar RESET (obligatorio en cada encendido) → inicia homing automático
+5. Verificar que el selector DOSER esté en UP para el homing
+6. Una vez completado el homing, el led START se pone verde fijo
+7. Activar las resistencias desde la barra lateral (HEATERS) → esperar que alcancen temperatura
+8. Verificar estado de DOORS, AIR, REEL en la barra superior
+
+CAMBIO DE BOBINA:
+1. Poner la máquina en modo manual (selector MAINTENANCE)
+2. Presionar dos botones externos de la pulsantiera para bloquear el film (BLOCCO 1 + BLOCCO 2)
+3. Cortar el material por el invito de la placa (usando la LAMA de la pulsantiera — PELIGRO)
+4. Presionar AVANTI + INDIETRO simultáneos (2 seg) para desbloquear el eje portabobina
+5. Abrir la portezuela de seguridad y rotar la palanca de seguridad
+6. Retirar el conjunto eje-bobina
+7. Desinflar el eje y retirar la bobina vacía
+8. Montar la nueva bobina en el eje e inflar con pistola de aire comprimido
+9. Reinsertar el eje en el grupo svolgibobina
+10. Empalmar el film nuevo con el existente (usando cinta adhesiva)
+11. Cerrar la portezuela y volver a modo automático → homing automático
+
+PASAJE DE FILM:
+1. Activar modo manual (selector MAINTENANCE)
+2. Desde el panel desactivar: cuchillas rotantes, lectura de tacca, lectura de giunzione y centraje automático de bobina
+3. Desenvolver la bobina siguiendo el esquema del adhesivo en la placa lateral
+4. Al llegar a la cuchilla divisora, tirar el film para dividirlo en dos fajas de igual ancho
+5. Enrollar el film en los soportes con cobertura de teflón y en los rodillos de goma
+6. Superponer las dos tiras, unirlas con cinta y pasar entre rodillos usando un cartón
+7. IMPORTANTE: usar mano derecha para avanzamiento manual (Inching), mano izquierda con el cartón
+8. Asegurarse que el film pase por las mordazas y entre los rodillos staccabuste
+9. Desactivar modo Inching y cerrar las puertas de protección
+10. Volver a modo automático → homing
+
+ALINEAMIENTO DE FILM (3 condiciones):
+Condición 1 – Desalineamiento hacia el interior (cuchilla divisora):
+Actuar sobre la manopola del cuchillo en el pasaje superior.
+⚠️ El ajuste DEBE hacerse con la máquina EN MOVIMIENTO; hacerlo con la máquina parada daña la cuchilla.
+
+Condición 2 – Desalineamiento hacia el interior (bobina):
+Usar los botones del panel para mover la bobina en la dirección donde falta material.
+Luego posicionar la fotocélula de centraje automático.
+
+Condición 3 – Desalineamiento hacia el exterior:
+Actuar sobre la manopola del divisor de film y verificar el centraje en los rodillos.
+
+REGULACIÓN CUCHILLAS DIVISORAS POST SOLDADURA:
+Actuar sobre el tornillo: aflojando → disminuye presión; apretando → aumenta presión.
+Medir posición del bloque con calibre usando el agujero específico.
+
+REGULACIÓN CONTRA-CUCHILLA DE CORTE TRANSVERSAL:
+1. Aflojar tornillos para mover la contra-cuchilla
+2. Para aumentar presión: aflojar tornillo N°2 y apretar tornillo N°1
+3. Fijar con tornillos en la posición correcta
+⚠️ Excesivo acercamiento entre las 2 lamas → deterioro prematuro de las cuchillas.
+
+REGULACIÓN RODILLOS STACCA-BUSTE:
+1. Aflojar la tuerca
+2. Regular la presión con el tornillo
+3. Asegurarse que los rodillos estén en contacto
+4. Apretar la tuerca para fijar la posición
+
+=== CAPÍTULO 3 – TRAINING E RISOLUZIONE PROBLEMI (Fascículo 3, Rev.0) ===
+
+--- OPERACIONES DE TRAINING – DETALLE ADICIONAL ---
+
+2.1.5 POSICIONAMIENTO NUEVA BOBINA (pasos completos):
+1. Utilizar un carretillo elevador para posicionar la bobina en la posición de trabajo
+2. Desenvolver la bobina lo necesario para permitir el bloqueo del material de embalaje en la placa dedicada a la giunzione
+3. Bloquear el soporte inferior para el fijado del material de embalaje, presionando el botón correspondiente
+4. Aplicar cinta adhesiva como se indica y unir el material de embalaje
+5. Cerrar el portezuelo (sportello)
+6. Rotar levemente la bobina manualmente hasta el enganche y bloqueo del eje
+7. Desbloquear los soportes de fijado del material de embalaje manteniendo presionados los dos botones externos
+
+2.1.6 ALINEAMIENTO DE FILM – REFERENCIAS VISUALES ESPECÍFICAS:
+⚠️ TODAS las operaciones toman como referencia el FRENTE de la máquina.
+⚠️ PRIMERO verificar que el alineamiento automático esté DESACTIVADO.
+
+CONDICIÓN 1 – Fajas con desalineamiento hacia el INTERIOR (cuchilla divisora):
+- Para regular: actuar sobre la manopola de la cuchilla del pasaje superior del film (lado izquierdo de la máquina, indicador "Rotating Knife For Paper Divider" / "KNIFE RIGHT" / "KNIFE LEFT")
+- ⚠️ El desplazamiento del divisor DEBE hacerse con la máquina EN MOVIMIENTO — hacerlo con máquina parada DAÑA la cuchilla.
+- Referencia visual: la cantidad de material debe ser igual en el extremo de la bolsita 1 (el borde de soldadura debe quedar centrado)
+
+CONDICIÓN 2 – Fajas con desalineamiento hacia el INTERIOR (bobina):
+- Actuar desde el panel usando los dos botones de dirección para mover la bobina
+- La bobina debe moverse hacia donde falta material
+- Ejemplo: si hay más film en el lado izquierdo → presionar el botón para que la bobina se desplace hacia la derecha
+- Una vez alineadas las dos fajas, posicionar manualmente las fotocélulas de centraje automático de bobina actuando sobre la manopola del lado izquierdo de la máquina (indicador "Photocell Position For Reel Centering" / "REEL")
+- Referencia visual: la cantidad de material debe ser igual al borde de la bolsita 6 (el material de sellado debe coincidir con el borde externo)
+- Resultado correcto condiciones 1+2: la cantidad de film presente en los laterales debe ser igual en ambos lados
+
+CONDICIÓN 3 – Fajas con desalineamiento hacia el EXTERIOR:
+- La cantidad de film presente externamente a las soldaduras es mayor de un lado
+- Para centrar las bolsitas: actuar sobre la manopola del divisor de film (indicador "Paper Divider Position") y controlar el centraje del film en los rodillos
+
+--- REGULACIONES MECÁNICAS ADICIONALES ---
+
+2.4 REGULACIÓN CONTRA-CUCHILLA STRIP:
+Si el punteado del strip es incorrecto (irregular, muy profundo o muy superficial), regular la posición del contra-cuchillo de strip:
+1. Aflojar las vitas para permitir el movimiento del contra-cuchillo
+2. Regular la posición actuando sobre las vitas: para aumentar la presión → aflojar la vita N°2 y apretar la vita N°1 (mismo principio que el contra-cuchillo de corte transversal)
+3. Fijar con las vitas en la posición correcta
+
+--- CAMBIO DE FORMATO – INTERFAZ TOC-L ---
+Regulaciones mecánicas necesarias al cambiar el formato de bolsita:
+1. Aflojar las vitas de las placas (1-2) y regular el soporte guía bolsitas según el formato a producir
+2. Aflojar las vitas y regular la posición del cilindro según el formato a producir
+3. Aflojar las vitas y desplazar la placa guía según el formato a producir
+4. Cambiar los cassetti (cajones) del nastro de transporte de bolsitas según el formato:
+   - Formato 12 bolsitas: cassetti más grandes
+   - Formato 10 bolsitas: cassetti más pequeños
+   ⚠️ IMPORTANTE: recordar apretar TODAS las vitas al terminar.
+
+--- CAMBIO DE FORMATO – ASTUCCIADORA ---
+Regulaciones para cambio de formato (numeradas del original):
+
+REGULACIONES FORMATO BOLSITAS (nastro prodotto):
+1. Guía fija: una vez encontrada la posición correcta, no necesita más regulaciones
+2. Guía móvil: regular según el formato de las bolsitas
+3. Ancho de cassetti de la cadena de transporte de bolsitas: aflojar vitas y actuar sobre el volantino → sentido horario = se ensanchan / sentido antihorario = se reducen
+
+REGULACIONES PRELEVAMIENTO CAJAS (raccolta astucci):
+11. Posición VERTICAL de la rueda de prelevamiento de cajas: volantino → horario = baja la estructura / antihorario = sube
+12. Sustituir el brazo de soporte de las ventosas si es necesario
+
+REGULACIONES ALMACÉN (magazzino astucci):
+13. Posición VERTICAL de la guía superior: volantino → horario = sube / antihorario = baja
+14. Posición EXTERIOR-INTERIOR de la guía superior: volantino → horario = hacia el exterior / antihorario = hacia el interior
+15. Manopolas para mover el tope de cajas según el formato
+16. Guía interna trasporte cajas: volantino → horario = exterior / antihorario = interior
+17. Guía central trasporte cajas: ídem
+18. Guía externa trasporte cajas: ídem
+19. Posición HORIZONTAL del almacén: volantino → antihorario = hacia rueda de prelevamiento / horario = lado contrario
+20. Posición VERTICAL del almacén: volantino → horario = hacia abajo / antihorario = hacia arriba
+21. Placa guía interna alimentación cajas: volantino → horario = hacia exterior (hacia el operador) / antihorario = hacia interior
+
+REGULACIONES FORMATO CAJA (astuccio – catena de composizione):
+31. Guía externa spintore: manopola, posición vertical
+32. Guía externa caja: manopola, posición vertical
+33. Sponda externa móvil: manopola → horario = hacia interior / antihorario = hacia exterior (hacia el operador)
+34. Guía lembo superior interno: manopola, posición vertical
+35. Guía interna caja: manopola, posición vertical
+36. Tope lembo anterior: manopola, posición vertical
+37. Guía lembo externo: manopola, posición vertical
+38. Plegador lembo superior interno: manopola, posición vertical
+39. Plegador lembo inferior interno: manopola, posición vertical
+40. Plegador lembo encastre: vita, posición vertical
+41. Spintore lembo externo: vita, posición vertical
+42. Spintore lembo interno: vita, posición vertical
+43. Pistola cola externa: manopola, posición vertical
+44. Pistola cola interna: manopola, posición vertical
+45. Grupo guías superiores + impresora: volantino → horario = sube / antihorario = baja
+46. Posición guías superiores: manopola
+47. Ancho guías superiores: volantino → horario = se ensanchan / antihorario = se reducen
+48. Ancho caja: volantino → horario = aumenta espacio entre spintori / antihorario = reduce espacio
+49. Fotocélula control caja encolada: regular posición según formato
+50. Pernos de extensión para desplazamiento de cajas en nastro de salida: agregar o quitar según formato
+
+--- ALARMAS ADICIONALES DEL FASCÍCULO 3 ---
+
+ACTIVE ALARM: Hay uno o más alarmas activos → Controlar los alarmas activos en la página ALARMS del panel.
+
+END OF PRODUCT (1,2,3,4): El sensor de nivel del producto detecta nivel bajo → Agregar producto. Verificar funcionamiento del sistema de carga de producto.
+
+PRODUCT TEMPERATURE: La temperatura del producto no está dentro del intervalo configurado → Esperar que el producto alcance la temperatura configurada. Controlar los valores de temperatura configurados. Verificar el funcionamiento del sensor de temperatura.
+
+PRECUT CUMULATIVE: El motor o el accionamiento del precut están en estado de alarma → Controlar el accionamiento y referirse al manual. Si persiste, contactar BOATO PACK o PARKER SBC Service.
+
+DOSER MOVEMENT TIMEOUT: El dosador no alcanzó la posición (en línea o fuera de línea) en el tiempo permitido → En movimiento automático, controlar el sistema de movimiento del dosador.
+
+INFEED HOMING TIMEOUT: El movimiento de homing del nastro INFEED superó el tiempo máximo → Controlar el accionamiento del nastro y el motor. Controlar las transmisiones mecánicas. Controlar el sensor de proximidad del homing.
+
+PRINTER HOMING TIMEOUT: El movimiento de homing del carrito de la impresora superó el tiempo máximo → Controlar el accionamiento del nastro y el motor. Controlar las transmisiones mecánicas. Controlar el sensor de proximidad del homing.
+
+--- ALARMAS DOSADOR WT (wet tissue / tejido no tejido) ---
+Estas alarmas corresponden al dosador WT que maneja tejido no tejido (TNT):
+
+WT1/WT2 REEL ALIGNMENT LIMIT REACHED: El svolgibobina del WT llegó al límite del rango de movimiento de centraje → Mover manualmente el svolgibobina con los botones manuales. Posicionar correctamente la fotocélula de alineamiento.
+
+WT1/WT2 TNT BROKEN: La bobina de tejido no tejido se rompió → Verificar el estado del TNT y eventualmente repasar el papel haciendo una giunzione en el punto de ruptura si es posible.
+
+WT STRAIGHT/CURVED PUSHER CUMULATIVE: El motor o accionamiento del spintore WT está en alarma → Controlar el accionamiento. Si persiste, contactar BOATO PACK.
+
+WT1/WT2 END OF TNT REEL: La bobina de TNT se terminó → Sustituir la bobina terminada por una nueva según los procedimientos del capítulo 2.
+
+TRACKING MISSING WT LINE (1,2,3..16): El control de presencia del pañuelo (fazzoletto) detectó la ausencia de un pañuelo en la línea indicada durante la fase de control → Verificar que no haya pañuelos bloqueados en el recorrido de las fajas de TNT. Controlar la posición y el pliegue de los pañuelos dentro de las bolsitas en salida; si están correctos, modificar la fase de tracking; si no, verificar la estación de corte del TNT.
+
+WT1/WT2 UNWINDER SPEED TOO LOW: El ballerino del svolgibobina WT llegó a la posición más alta → Controlar el svolgibobina WT. Verificar el pasaje del tejido no tejido.
+
+WT CUT MOTOR: El motor o accionamiento de la cuchilla del TNT está en alarma → Controlar el accionamiento. Si persiste, contactar BOATO PACK.
+
+WT PULL MOTOR: El motor o accionamiento de los rodillos tiradores del TNT está en alarma → Controlar el accionamiento. Si persiste, contactar BOATO PACK.
+
+PULLING BELTS MOTOR: El motor o accionamiento de los nastros transportadores del TNT está en alarma → Controlar el accionamiento. Si persiste, contactar BOATO PACK.
+
+WT1/WT2 JOINT DETECTED: La fotocélula detectó una giunzione en el tejido no tejido → Descartar las bolsitas producidas con la giunzione del tejido.
+
+=== CAPÍTULO 4 – MANUTENZIONE E PARTI DI RICAMBIO (Fascículo 4, Rev.0) ===
+
+NOTA GENERAL: Todas las operaciones de mantenimiento deben realizarse con la MÁQUINA DETENIDA, salvo indicación contraria explícita.
+
+--- 2.1 MANTENIMIENTO DOSADOR FAF ---
+
+VITE A COCLEA DE CARGA DE PRODUCTO (coclea opcional):
+- Controlar mensualmente todas las juntas del grupo para evitar pérdidas de producto; sustituirlas cuando sea necesario (la durabilidad varía según el uso)
+- Los cojinetes son autolubricantes — no requieren mantenimiento, pero verificar su estado mensualmente y sustituir si es necesario
+- Controlar el estado del giunto (acoplamiento) que conecta el motor a la coclea: verificar siempre el desgaste del material de amortiguación para garantizar la correcta transmisión del movimiento
+- Limpieza a fondo en cada cambio de producto (todas las partes en contacto con el producto):
+  1. Aflojar el clamp
+  2. Retirar la brida de cierre junto con la coclea
+  3. Limpiar el tubo y la coclea con agua tibia o detergente; secar con aire comprimido y retirar residuos con paño seco
+  4. Rearmar prestando atención a las juntas
+
+TRANSPORTE DE PRODUCTO – TOLVA SUPERIOR:
+- Controlar mensualmente todas las juntas del grupo
+- Verificar mensualmente el estado de los cojinetes
+- Limpieza a fondo en cada cambio de producto:
+  1. Retirar el sensor de nivel
+  2. Retirar los agitadores de la tolva prestando atención a las juntas; limpiarlos con agua tibia
+  3. Limpiar el interior de la tolva con agua tibia; secar con aire comprimido y luego con paño limpio seco
+  4. Rearmar prestando atención a las juntas
+
+VITES A COCLEA DE TRANSPORTE DE PRODUCTO:
+1. Aflojar los bulones
+2. Desplazar el minimotor y su placa para liberar el acceso a todos los engranajes de las coclee
+3. Retirar la placa junto con las coclee y los engranajes
+4. Limpiar las coclee con agua tibia; secar con aire comprimido y luego con paño seco
+5. Si es necesario, aspirar los residuos de polvo del colector y de los tubos
+6. Rearmar prestando mucha atención a las juntas
+
+TOLVA + SISTEMA DE DOSIFICACIÓN:
+- Controlar el giunto del motor a la coclea mensualmente
+- Los cojinetes son autolubricantes; controlar su estado mensualmente
+- Para verificar el funcionamiento de la coclea: desconectar los motores y girar manualmente la coclea
+- Controlar mensualmente todas las juntas del grupo
+- Limpieza a fondo en cada cambio de producto:
+  1. Limpiar todas las partes internas de la tolva, los ejes de las coclee y los agitadores con agua tibia
+  2. Secar con aire comprimido para eliminar residuos de producto
+
+REMOCIÓN DE TOLVA CON SOPORTE (procedimiento):
+1. Retirar todas las partes del aspirador
+2. Subir todo el dosador presionando el botón en el panel (Doser UP)
+3. Aflojar las vitas, desbloquear y desplazar los soportes de los tubos cut-off para separarlos de ellos
+4. Desplazar la estructura de movimentación cut-off a lo largo de las guías lineales
+5. Rotar el perno de bloqueo y retirar las coclee
+6. Aflojar las vitas, retirar el soporte y luego el tubo cut-off
+7. Posicionar el soporte donde se apoyará la tolva sobre las placas superiores anteriores de la máquina (verificar que esté fijado correctamente antes de continuar)
+8. Aflojar las 4 vitas que fijan la tolva a la estructura
+9. Apoyar la tolva sobre el soporte e inclinarla levemente para que salga del espacio de los agitadores
+10. Para remontar: realizar las mismas operaciones en orden inverso
+11. Bajar el dosador
+
+REMOCIÓN DE TOLVA CON CARRETILLO ELEVADOR:
+1. Subir el dosador desde el panel y posicionar el carretillo elevador en la posición correcta
+2. Subir la placa de apoyo del dosador con la manivela para que la placa pase entre los dos bloquecitos
+3. Bloquear el carretillo con los frenos de las ruedas
+4. Aflojar las 4 vitas que fijan la tolva a la estructura
+5. Mover levemente la tolva y desplazarla primero hacia la izquierda (respecto al frente de la máquina) y luego sacarla del espacio de la máquina
+6. Para remontar: operaciones inversas
+
+MOVIMENTACIÓN DOSADOR (guías lineales):
+- Controlar periódicamente el funcionamiento de las partes móviles (carritos)
+- Engrasar semanalmente la guía lineal usando el engrasador instalado en el carrito móvil
+- Limpieza DIARIA de las guías lineales para retirar residuos de producto
+- Controlar periódicamente los filtros del sistema neumático y limpiarlos de polvo e impurezas
+
+MOVIMENTACIÓN CUT-OFF:
+- Los cojinetes son autolubricantes
+- Controlar mensualmente el estado de los cojinetes
+- Controlar periódicamente las partes móviles (carritos)
+- Engrasar semanalmente la guía lineal con el engrasador del carrito móvil
+- Limpieza diaria de las guías lineales
+- Controlar periódicamente los filtros neumáticos
+
+--- 2.2 MANTENIMIENTO MÁQUINA BASE TORNADO EVO 2.0 ---
+
+COLTELLI PNEUMATICI DIVISORI FASCE (cuchillas neumáticas divisoras):
+- No requieren mantenimiento rutinario
+- ⚠️ Verificar que tanto los cojinetes de bolas como las superficies de contacto laterales de las lamas estén lubricados. Para las superficies de contacto usar pasta Molykote BR2
+- ⚠️ NO usar aire comprimido para la limpieza — los depósitos de polvo deben ASPIRARSE
+
+RULLI SALDANTI (rodillos de sellado):
+- Verificar que no haya rayaduras o estrías en los relieves zigzagueados del área de soldadura, ni daños generales en la estructura del rodillo
+- Los cojinetes son autolubricantes; controlar mensualmente
+- Para regular la presión de los rodillos sobre el material de embalaje: actuar sobre el grano (tornillo de presión)
+  ⚠️ Una presión excesiva puede causar deterioro prematuro de los rodillos — proceder con cuidado
+- Controlar periódicamente que el resorte de compresión no esté deformado
+- Limpieza DIARIA de toda la estación de sellado: para los rodillos, retirar el polietileno depositado en las partes de soldadura usando un cepillo de bronce, luego limpiar el residuo con paño limpio seco
+
+GANASCE SALDANTI (mordazas de sellado):
+- Verificar que no haya rayaduras o estrías en los relieves zigzagueados del área de soldadura
+- Los cojinetes son autolubricantes; controlar mensualmente
+- ⚠️ Es MUY IMPORTANTE no tocar las cuchillas del "easy tear notch" (invito al desgarre) — están instaladas con máxima precisión y cualquier mínimo movimiento puede dañar su funcionamiento
+- Para regular la presión de las mordazas: actuar sobre el grano
+  ⚠️ Presión excesiva = deterioro prematuro de las ganasce — proceder con cuidado
+- Controlar periódicamente que el resorte de compresión no esté deformado
+- Limpieza DIARIA de toda la estación de sellado: retirar el polietileno depositado usando un cepillo de bronce, luego limpiar con paño limpio seco
+
+COLTELLI DIVISORI FASCE POST SALDATURA (cuchillas divisoras post soldadura):
+- Controlar periódicamente el filo de las lamas para garantizar siempre un corte óptimo de la bolsita
+- Para regular la presión: hay una vita y un resorte de compresión — controlar periódicamente la presión del resorte
+  ⚠️ Presión excesiva puede deteriorar prematuramente las ganasce
+- Los cojinetes son autolubricantes; controlar mensualmente
+
+PARTICOLARI ABBINAMENTO IN LINEA (estación de abbinamento):
+- Controlar periódicamente el filo de las lamas que sirven para retirar residuos de polietileno de la soldadura
+- El cilindro neumático requiere control periódico de su condición; sustituir si hay desgaste
+
+STAZIONE TAGLIO TRASVERSALE (estación de corte transversal):
+- Verificar periódicamente el filo del coltello y el contro-coltello
+- Un eventual deterioro puede deberse a presión incorrecta entre coltello y contro-coltello
+- Controlar periódicamente el estado de los o-rings que permiten el traino de las bolsitas
+- Los cojinetes son autolubricantes; controlar mensualmente
+- Asegurarse de que la correa esté calibrada correctamente para evitar desgaste prematuro
+- Los cilindros neumáticos requieren control periódico; sustituir si hay desgaste
+
+SVOLGIBOBINA (desbobinador):
+- Engrasar periódicamente la boquilla que permite el centraje automático de la bobina
+- Los cilindros neumáticos requieren control periódico; sustituir si hay desgaste
+- Verificar mensualmente el estado de los o-rings que permiten el fijado del material de embalaje durante la giunzione; sustituir si es necesario
+- Los cojinetes son autolubricantes; controlar mensualmente
+
+COLTELLO PNEUMATICO GRUPPO SUPERIORE PASSAGGIO FILM:
+- No requiere mantenimiento rutinario
+- ⚠️ Verificar que tanto los cojinetes de bolas como las superficies de contacto laterales de las lamas estén lubricados (para las superficies usar pasta Molykote BR2)
+- ⚠️ NO usar aire comprimido para la limpieza — aspirar los depósitos de polvo
+
+MECCANICHE INTERNE (mecánica interna):
+- Lubricación de los engranajes: debe realizarse con periodicidad exacta, UNA VEZ AL MES
+- Un mantenimiento óptimo puede aumentar la durabilidad funcional de la máquina, reduciendo las fallas
+- Los cojinetes son autolubricantes; controlar mensualmente
+- Asegurarse de que la correa esté calibrada correctamente para evitar desgaste prematuro
+
+NASTRI (cintas transportadoras):
+- Limpieza DIARIA y/o cuando sea necesario de las cintas de transporte de bolsitas
+- Pasar la cinta con un trapo húmedo para retirar el producto acumulado, luego secar con paño limpio seco
+- Verificar el tensionado correcto de las cintas y/o correas; si es necesario, ajustar usando el sistema de tensionado presente en cada cinta de la máquina
+
+--- 2.3 MANTENIMIENTO INTERFAZ TOC-L ---
+- No requiere operaciones especiales de mantenimiento
+- Limpieza DIARIA de las cintas y/o correas (pasar trapo húmedo, luego secar) y de toda la máquina en general
+- Controlar el estado de los distintos giunti (acoplamientos): verificar siempre el desgaste del material de amortiguación para garantizar la correcta transmisión del movimiento
+- Los cojinetes son autolubricantes; controlar mensualmente
+
+--- 2.4 MANTENIMIENTO ASTUCCIADORA TOC-LEVO ---
+- Controlar periódicamente los filtros del sistema neumático y limpiarlos de polvo e impurezas
+- Controlar el funcionamiento de las partes móviles (carritos); engrasar semanalmente la guía lineal usando el engrasador del carrito móvil
+- Controlar periódicamente el estado de las ventosas de prelevamiento; sustituirlas si están desgastadas
+- Cada 80/100 horas (con máquina detenida): engrasar las levas mecánicas para la movimentación de la máquina
+- Verificar el tensionado correcto de las cintas y/o nastrinos; ajustar si es necesario
+- Limpieza DIARIA de las cintas y de la máquina en general
+- Los cojinetes son autolubricantes; controlar mensualmente
+
+--- RESUMEN DE FRECUENCIAS DE MANTENIMIENTO ---
+
+DIARIO:
+- Limpieza cintas/correas de todas las secciones (trapo húmedo + secado)
+- Limpieza guías lineales del dosador (retirar residuos de producto)
+- Limpieza estación de sellado (rulli y ganasce) con cepillo de bronce + paño seco
+
+SEMANAL (una vez por semana):
+- Engrase guía lineal movimentación dosador
+- Engrase guía lineal movimentación cut-off
+- Engrase guía lineal astucciadora
+
+CADA 80-100 HORAS (máquina detenida):
+- Engrase levas mecánicas de la astucciadora
+
+MENSUAL (una vez al mes):
+- Verificar estado de cojinetes en TODOS los grupos (sustituir si es necesario)
+- Lubricación de engranajes de la mecánica interna de la máquina base
+- Verificar juntas del dosador (coclea de carga, transporte, dosificación)
+- Verificar o-rings del svolgibobina (giunzione film)
+- Verificar lubricación de superficies de contacto de cuchillas (pasta Molykote BR2)
+- Controlar resortes de compresión de rulli y ganasce (no deformados)
+- Controlar filtros del sistema neumático (limpiar de polvo e impurezas)
+
+EN CADA CAMBIO DE PRODUCTO:
+- Limpieza a fondo de todas las partes en contacto con el producto en el dosador:
+  tolva superior, coclee de transporte, tolva de dosificación, tubos cut-off
+
+PERIÓDICO (según condición):
+- Verificar filo de coltelli divisori post saldatura
+- Verificar filo de coltello y contro-coltello de corte transversal
+- Verificar estado de ventosas de la astucciadora
+- Verificar tensionado de correas de la mecánica interna
+- Verificar tensionado de cintas de todas las secciones
+
+=== INSTRUCCIONES DE RESPUESTA ===
+
+INSTRUCCIONES ADICIONALES:
+- Si no encontrás la información exacta en el manual, decilo claramente y sugerí contactar a BOATO PACK (CAT – Centro de Asistencia Técnica) o al servicio técnico calificado.
+- Si la pregunta es ambigua, pedí más detalles (ej: "¿qué código de alarma aparece en el panel?" o "¿en qué página del display lo ves?").
+- Para alarmas graves (emergency, safety circuit, temperatura fuera de rango), siempre indicá detener la máquina antes de intervenir.
+- Para operaciones eléctricas o de mantenimiento extraordinario, indicar que debe intervenir el manutentore eléctrico o técnico C.A.T. calificado.
+- Para preguntas de mantenimiento, indicar claramente la frecuencia (diaria, semanal, mensual, cada 80-100h, en cada cambio de producto) y si la máquina debe estar detenida.
+- Usá formato claro: causas separadas de soluciones. Podés usar listas numeradas para los pasos.
+- Sé conciso: el operador necesita la respuesta rápido, en planta.
+- Cuando menciones componentes italianos, ponés la traducción en español entre paréntesis la primera vez.
+- Si la pregunta involucra la astucciadora, el dosador, o la interfaz TOCL específicamente, usá la información detallada de esas secciones.
+`;
+
+let history = [];
+let isLoading = false;
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function sendChip(el) {
+  const text = el.textContent.replace(/^[^\s]+\s/, '');
+  document.getElementById('userInput').value = text;
+  sendMessage();
+}
+
+function appendMsg(role, html, isHTML = false) {
+  const chat = document.getElementById('chat');
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+
+  const avatar = document.createElement('div');
+  avatar.className = 'avatar';
+  avatar.textContent = role === 'bot' ? 'BP' : 'OP';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+
+  if (isHTML) {
+    bubble.innerHTML = html;
+  } else {
+    bubble.textContent = html;
+  }
+
+  div.appendChild(avatar);
+  div.appendChild(bubble);
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+  return bubble;
+}
+
+function showTyping() {
+  const chat = document.getElementById('chat');
+  const div = document.createElement('div');
+  div.className = 'msg bot';
+  div.id = 'typing-msg';
+
+  const avatar = document.createElement('div');
+  avatar.className = 'avatar';
+  avatar.textContent = 'BP';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+
+  div.appendChild(avatar);
+  div.appendChild(bubble);
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function removeTyping() {
+  const t = document.getElementById('typing-msg');
+  if (t) t.remove();
+}
+
+function formatResponse(text) {
+  let html = text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+  const lines = html.split('\n');
+  let result = '';
+  let inList = false;
+  let listType = null;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) {
+      if (inList) {
+        result += listType === 'ul' ? '</ul>' : '</ol>';
+        inList = false; listType = null;
+      }
+      result += '<br>';
+      continue;
+    }
+
+    const numMatch = line.match(/^(\d+)\.\s(.+)/);
+    const bulletMatch = line.match(/^[-•]\s(.+)/);
+
+    if (numMatch) {
+      if (!inList || listType !== 'ol') {
+        if (inList) result += '</ul>';
+        result += '<ol>'; inList = true; listType = 'ol';
+      }
+      result += `<li>${numMatch[2]}</li>`;
+    } else if (bulletMatch) {
+      if (!inList || listType !== 'ul') {
+        if (inList) result += '</ol>';
+        result += '<ul>'; inList = true; listType = 'ul';
+      }
+      result += `<li>${bulletMatch[1]}</li>`;
+    } else {
+      if (inList) {
+        result += listType === 'ul' ? '</ul>' : '</ol>';
+        inList = false; listType = null;
+      }
+      if (line.match(/^[A-ZÁÉÍÓÚ][^.!?]*:$/) && line.length < 60) {
+        result += `<div class="section-label">${line}</div>`;
+      } else {
+        result += line + ' ';
+      }
+    }
+  }
+
+  if (inList) result += listType === 'ul' ? '</ul>' : '</ol>';
+  return result.trim();
+}
+
+async function sendMessage() {
+  const input = document.getElementById('userInput');
+  const text = input.value.trim();
+  if (!text || isLoading) return;
+
+  input.value = '';
+  input.style.height = 'auto';
+  isLoading = true;
+  document.getElementById('sendBtn').disabled = true;
+
+  appendMsg('user', text);
+  history.push({ role: 'user', content: text });
+
+  showTyping();
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: MANUAL_CONTEXT,
+        messages: history
+      })
+    });
+
+    const data = await response.json();
+    const reply = data.content?.[0]?.text || 'No pude obtener respuesta. Intentá de nuevo.';
+
+    history.push({ role: 'assistant', content: reply });
+
+    removeTyping();
+    appendMsg('bot', formatResponse(reply), true);
+
+  } catch (err) {
+    removeTyping();
+    appendMsg('bot', '⚠️ Error de conexión. Verificá la red e intentá de nuevo.', true);
+    console.error(err);
+  }
+
+  isLoading = false;
+  document.getElementById('sendBtn').disabled = false;
+  input.focus();
+}
+</script>
+
+</body>
+</html>
