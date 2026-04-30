@@ -31,7 +31,6 @@ body {
   overflow: hidden;
 }
 
-/* HEADER */
 header {
   background: var(--mid);
   border-bottom: 2px solid var(--red);
@@ -54,18 +53,8 @@ header {
   white-space: nowrap;
 }
 
-.header-info h1 {
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-}
-
-.header-info p {
-  font-size: 11px;
-  color: var(--muted);
-  font-family: 'IBM Plex Mono', monospace;
-  margin-top: 1px;
-}
+.header-info h1 { font-size: 15px; font-weight: 600; letter-spacing: 0.02em; }
+.header-info p { font-size: 11px; color: var(--muted); font-family: 'IBM Plex Mono', monospace; margin-top: 1px; }
 
 .status-dot {
   width: 8px; height: 8px;
@@ -77,12 +66,8 @@ header {
   animation: pulse 2s infinite;
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-/* QUICK CHIPS */
 .chips-bar {
   background: var(--dark);
   padding: 10px 16px;
@@ -106,13 +91,8 @@ header {
   white-space: nowrap;
 }
 
-.chip:hover {
-  border-color: var(--red);
-  color: var(--text);
-  background: #2A1515;
-}
+.chip:hover { border-color: var(--red); color: var(--text); background: #2A1515; }
 
-/* CHAT AREA */
 #chat {
   flex: 1;
   overflow-y: auto;
@@ -127,18 +107,8 @@ header {
 #chat::-webkit-scrollbar-track { background: transparent; }
 #chat::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-.msg {
-  display: flex;
-  gap: 10px;
-  animation: fadeUp 0.2s ease;
-  max-width: 100%;
-}
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
+.msg { display: flex; gap: 10px; animation: fadeUp 0.2s ease; max-width: 100%; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 .msg.user { flex-direction: row-reverse; }
 
 .avatar {
@@ -153,17 +123,8 @@ header {
   font-family: 'IBM Plex Mono', monospace;
 }
 
-.msg.bot .avatar {
-  background: var(--red);
-  color: #fff;
-  font-size: 11px;
-}
-
-.msg.user .avatar {
-  background: var(--border);
-  color: var(--muted);
-  font-size: 11px;
-}
+.msg.bot .avatar { background: var(--red); color: #fff; font-size: 11px; }
+.msg.user .avatar { background: var(--border); color: var(--muted); font-size: 11px; }
 
 .bubble {
   background: var(--bot-bg);
@@ -173,7 +134,6 @@ header {
   font-size: 13.5px;
   line-height: 1.65;
   max-width: calc(100% - 50px);
-  position: relative;
 }
 
 .msg.user .bubble {
@@ -184,23 +144,8 @@ header {
 }
 
 .bubble strong { color: #fff; font-weight: 600; }
-
-.bubble .alarm-tag {
-  display: inline-block;
-  background: #3A1A1A;
-  border: 1px solid var(--red);
-  color: var(--red);
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  padding: 2px 6px;
-  border-radius: 3px;
-  margin-bottom: 8px;
-  letter-spacing: 0.05em;
-}
-
 .bubble ul { margin: 6px 0 6px 16px; }
 .bubble li { margin-bottom: 4px; }
-
 .bubble .section-label {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
@@ -210,33 +155,19 @@ header {
   margin-bottom: 4px;
   margin-top: 10px;
 }
-
 .bubble .section-label:first-child { margin-top: 0; }
 
-/* TYPING */
-.typing-indicator {
-  display: flex;
-  gap: 4px;
-  padding: 4px 0;
-  align-items: center;
-}
-
+.typing-indicator { display: flex; gap: 4px; padding: 4px 0; align-items: center; }
 .typing-indicator span {
   width: 6px; height: 6px;
   border-radius: 50%;
   background: var(--muted);
   animation: bounce 1.2s infinite;
 }
-
 .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
 .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; } 40% { transform: scale(1); opacity: 1; } }
 
-@keyframes bounce {
-  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
-  40% { transform: scale(1); opacity: 1; }
-}
-
-/* INPUT AREA */
 .input-wrap {
   background: var(--mid);
   border-top: 1px solid var(--border);
@@ -272,8 +203,7 @@ header {
   border: none;
   border-radius: 8px;
   color: #fff;
-  width: 42px;
-  height: 42px;
+  width: 42px; height: 42px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -294,7 +224,6 @@ header {
   padding: 4px 0 0;
 }
 
-/* WELCOME */
 .welcome-card {
   background: var(--mid);
   border: 1px solid var(--border);
@@ -304,18 +233,8 @@ header {
   margin-bottom: 4px;
 }
 
-.welcome-card h2 {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-.welcome-card p {
-  font-size: 12.5px;
-  color: var(--muted);
-  line-height: 1.6;
-}
-
+.welcome-card h2 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+.welcome-card p { font-size: 12.5px; color: var(--muted); line-height: 1.6; }
 .welcome-card .machine-id {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
@@ -369,7 +288,7 @@ header {
   <div class="welcome-card">
     <div class="machine-id">MOD: TO8N 2.0 · REV.0 · HALEON ARG</div>
     <h2>¿Qué problema estás teniendo?</h2>
-    <p>Describí el síntoma, código de alarma o consulta de mantenimiento y te respondo basándome en los 4 fascículos técnicos oficiales de Boato Pack: Uso y Descripción, Training y Resolución de Problemas, y Mantenimiento.</p>
+    <p>Describí el síntoma, código de alarma o consulta de mantenimiento y te respondo basándome en los fascículos técnicos oficiales de Boato Pack.</p>
   </div>
 </div>
 
@@ -383,7 +302,7 @@ header {
     </svg>
   </button>
 </div>
-<div class="footer-note">Respuestas basadas en los 4 fascículos oficiales Boato Pack – TO8N 2.0 Rev.0</div>
+<div class="footer-note">Respuestas basadas en los fascículos oficiales Boato Pack – TO8N 2.0 Rev.0</div>
 
 <script>
 const MANUAL_CONTEXT = `
@@ -394,14 +313,11 @@ Para operaciones: pasos numerados. Indicá siempre si requiere máquina detenida
 Para mantenimiento: frecuencia y si debe hacerse con máquina parada.
 Si no encontrás la info exacta, decilo y sugerí contactar a BOATO PACK (C.A.T.).
 
-=== TERMINOLOGÍA ===
-Ganasce=mordazas sellado transversal | Rulli=rodillos sellado longitudinal | Bobina=rollo de film | Ballerino=eje tensor | Tacca=marca de registro | Giunzione=empalme de film | Svolgibobina=desbobinador | Astucciadora=encajadora | TOCL=interfaz entre máquina y astucciadora | Q.E.=tablero eléctrico
-
 === ENCENDIDO ===
 1. Conectar aire a la válvula
 2. Girar interruptor a ON
 3. Hacer login en panel
-4. Presionar RESET (obligatorio en cada encendido) → inicia homing
+4. Presionar RESET → inicia homing
 5. Selector DOSER en UP para el homing
 6. Led START verde fijo = listo
 7. Activar HEATERS → esperar temperatura
@@ -409,7 +325,7 @@ Ganasce=mordazas sellado transversal | Rulli=rodillos sellado longitudinal | Bob
 
 === CAMBIO DE BOBINA ===
 1. Modo manual (selector MAINTENANCE)
-2. Presionar BLOCCO 1 + BLOCCO 2 (botones externos pulsantiera) → bloquea film
+2. Presionar BLOCCO 1 + BLOCCO 2 → bloquea film
 3. Cortar material por el invito de la placa (PELIGRO: LAMA)
 4. AVANTI + INDIETRO simultáneos 2 seg → desbloquea eje
 5. Abrir portezuelo → rotar palanca de seguridad
@@ -428,32 +344,30 @@ Ganasce=mordazas sellado transversal | Rulli=rodillos sellado longitudinal | Bob
 5. Enrollar film en soportes de teflón y rodillos de goma
 6. Superponer las 2 fajas, unir con cinta, insertar entre rodillos con cartón
 7. Mano derecha: botón inching | Mano izquierda: cartón
-8. Asegurar que film pase por ganasce y entre rodillos staccabuste
+8. Asegurar que film pase por mordazas y entre rodillos staccabuste
 9. Desactivar inching → cerrar puertas → volver a automático
 
 === ALINEAMIENTO DE FILM ===
 ⚠️ Referencia siempre desde el FRENTE de la máquina. Desactivar alineamiento automático primero.
 CONDICIÓN 1 – Desalineamiento hacia interior (cuchilla):
-  Actuar sobre manopola lado izquierdo (indicador "Rotating Knife For Paper Divider")
-  ⚠️ SOLO con máquina EN MOVIMIENTO — parada daña la cuchilla
-  Referencia: material igual en extremo de bolsita 1
+  Actuar sobre manopola lado izquierdo. SOLO con máquina EN MOVIMIENTO.
+  Referencia: material igual en extremo de bolsita 1.
 CONDICIÓN 2 – Desalineamiento hacia interior (bobina):
-  Mover bobina desde panel (flechas REEL) hacia donde falta material
-  Luego posicionar fotocélula de centraje (manopola izq, indicador "Photocell Position For Reel Centering")
-  Referencia: material igual al borde de bolsita 6
+  Mover bobina desde panel (flechas REEL). Luego posicionar fotocélula de centraje.
+  Referencia: material igual al borde de bolsita 6.
 CONDICIÓN 3 – Desalineamiento hacia exterior:
-  Actuar sobre manopola divisor de film (indicador "Paper Divider Position")
+  Actuar sobre manopola divisor de film.
 
 === PANEL – TECLAS FÍSICAS ===
-START (led verde): fijo=listo | parpadeante=en marcha | apagado=no disponible
-STOP (led rojo): stop en fase, completa 2 ciclos, para en posición 0
-RESET (led azul): resetea alarmas/emergencias + inicia homing. Obligatorio en cada encendido.
-INCHING (led blanco): movimiento lento en modo manual (mantener presionado)
-EMERGENCY (seta): para inmediata, corta potencia y purga neumática. Requiere llave para reponer.
+START: led verde fijo=listo | parpadeante=en marcha | apagado=no disponible
+STOP: para en fase, completa 2 ciclos, para en posición 0
+RESET: resetea alarmas/emergencias + inicia homing. Obligatorio en cada encendido.
+INCHING: movimiento lento en modo manual (mantener presionado)
+EMERGENCY: para inmediata, corta potencia y purga neumática. Requiere llave para reponer.
 MAINTENANCE: activa modo manual. Al volver a automático → homing automático.
 DOSER UP/DOWN: UP=dosador arriba (requerido para homing) | DOWN=dosador en línea
 
-=== PANEL – BARRA SUPERIOR (estado) ===
+=== PANEL – BARRA SUPERIOR ===
 EMERG: rojo=emergencia | verde=normal
 DOORS: rojo=puerta abierta | verde=todas cerradas
 MANUAL: rojo=modo manual | verde=automático
@@ -461,122 +375,66 @@ AIR: rojo=falta aire (debe ser 6 bar) | verde=OK
 REEL: rojo=bobina terminada | rojo parpadeante=por terminar | verde=OK
 TIMING: verde=homing OK | verde parpadeante=en curso | gris=no ejecutado
 
-=== ALARMAS – OVERLOAD ===
-OVERLOAD RELAY: Relés AC absorbieron corriente excesiva → Verificar cuál relé está apagado, reponerlo, controlar motor (revisar absorción de corriente)
-IONIZER OVERLOAD: Interruptor disactivado por absorción anómala → Verificar interruptor automático, reponerlo, controlar dispositivo (conexiones)
-REEL ALIGNMENT SYSTEM OVERLOAD: Interruptor disactivado → Verificar interruptor, reponerlo, controlar dispositivo (problemas mecánicos)
-EXIT BELT OVERLOAD OR INVERTER ALARM: Interruptor o inverter en alarma → Verificar interruptor e inverter, revisar mecánica
-UNWINDER OVERLOAD OR INVERTER ALARM: Interruptor o inverter en alarma → Verificar interruptor e inverter, revisar mecánica
-PSU OVERLOAD: Interruptor disactivado → Verificar interruptor, reponerlo, revisar mecánica
-HEATERS OVERLOAD: Interruptor disactivado → Verificar interruptor, reponerlo, revisar dispositivo
-ASPIRATORS OVERLOAD: Interruptor disactivado → Verificar interruptor, reponerlo, revisar dispositivo
-HOPPER AGITATOR OVERLOAD: Interruptor disactivado → Verificar interruptor, reponerlo, revisar dispositivo
+=== ALARMAS CUMULATIVE ===
+Todas indican motor/drive en alarma. Verificar drive correspondiente. Si persiste: contactar BOATO PACK o servicio SBC/PARKER.
+FILM CUMULATIVE: motor de avanzamiento
+KNIFE CUMULATIVE: motor cuchilla
+JAWS CUMULATIVE: motor mordazas
+STRIP CUMULATIVE: motor cuchilla strip
+UNWINDER CUMULATIVE: motor desbobinador
+POWDER DOSER CUMULATIVE: motor dosificador polvos
+LIQUID DOSER CUMULATIVE: motor dosificador líquidos
+INFEED CUMULATIVE: motor cinta infeed
+PRECUT CUMULATIVE: motor precut
 
-=== ALARMAS – CUMULATIVE ===
-FILM CUMULATIVE: Motor de avanzamiento a tensión muy alta → Verificar drive. Si persiste: contactar BOATO PACK o servicio SBC.
-KNIFE CUMULATIVE: Motor/drive cuchilla en alarma → Verificar drive. Si persiste: BOATO PACK o PARKER SBC.
-JAWS CUMULATIVE: Motor mordazas a tensión muy alta → Verificar drive. Si persiste: BOATO PACK o servicio SBC.
-PRINTER CUMULATIVE: Unidad de impresión en alarma → Verificar impresora, referirse a su manual.
-STRIP CUMULATIVE: Motor/drive cuchilla strip en alarma → Verificar drive. Si persiste: BOATO PACK o PARKER SBC.
-UNWINDER CUMULATIVE: Motor/drive desbobinador en alarma → Verificar drive. Si persiste: BOATO PACK.
-WT PUSHER CUMULATIVE: Motor/drive spintore WT en alarma → Verificar drive. Si persiste: BOATO PACK.
-POWDER DOSER CUMULATIVE: Motor/drive dosificador polvos en alarma → Verificar drive. Si persiste: BOATO PACK.
-LIQUID DOSER CUMULATIVE: Motor/drive dosificador líquidos en alarma → Verificar drive. Si persiste: BOATO PACK.
-INFEED CUMULATIVE: Motor/drive cinta INFEED en alarma → Verificar drive. Si persiste: BOATO PACK.
-PRECUT CUMULATIVE: Motor/drive precut en alarma → Verificar drive. Si persiste: BOATO PACK o PARKER SBC.
+=== ALARMAS OVERLOAD ===
+Todas indican interruptor automático disparado por sobrecorriente.
+Acción general: verificar cuál interruptor está apagado → reponerlo → controlar motor/dispositivo.
+Si se repite: revisar mecánica y absorción de corriente.
 
 === ALARMAS – SEGURIDAD ===
-SAFETY DOORS OPEN (1,2,3..): Puerta abierta → Verificar cierre correcto de puertas, sensores de cierre y sistema de seguridad
-EMERGENCY BUTTON PRESSED: Botón de emergencia presionado → Verificar estado de botones, reponerlos con llave, verificar sistema de seguridad
-SAFETY KEY OPEN: Portezuelo svolgibobina abierto → Cerrar portezuelo, verificar funcionamiento, verificar sistema de seguridad
-EMERGENCY CIRCUIT NOT INSERTED: Circuito de seguridad no cerrado → Verificar puertas, botones de emergencia y dispositivos de control
+SAFETY DOORS OPEN: Verificar cierre correcto de puertas y sensores
+EMERGENCY BUTTON PRESSED: Reponer botones con llave, verificar sistema
+SAFETY KEY OPEN: Cerrar portezuelo del desbobinador
+EMERGENCY CIRCUIT NOT INSERTED: Verificar puertas, botones y dispositivos de control
 
-=== ALARMAS – MOVIMIENTO/POSICIONAMIENTO ===
-JAWS PROXIMITY DETECTION MISSING: Fotocélula no detectó tacca 5 veces consecutivas → Material mal posicionado o fotocélula sucia/lente cubierta. Consultar manual SICK.
-UPPER DEVIATOR ALARMS: Sensor proximidad no detectó cambio al activar deviador → Controlar cilindro neumático, sensor proximidad, electroválvula
-LOWER DEVIATOR ALARMS: Ídem deviador inferior
-STRIP MOVEMENT TIMEOUT: Movimiento cuchilla strip demasiado lento → Verificar motor y sensores
-KNIFE MOVEMENT TIMEOUT: Movimiento cuchilla demasiado lento → Verificar motor y sensores
-JAWS MOVEMENT TIMEOUT: Movimiento mordazas demasiado lento → Verificar motor y sensores
-REEL CENTERING LIMIT REACHED: Svolgibobina llegó al límite de rango de centraje → Mover manualmente con botones del panel. Posicionar correctamente fotocélula de alineamiento. Verificar sensor de centraje.
-FILM UNWINDER SPEED TOO LOW: Ballerino en posición más alta → Controlar svolgibobina. Verificar pasaje de material.
-FILM BROKEN: Ballerino en posición más baja → Controlar svolgibobina y pasaje de material. Verificar posición ballerino y sensor lineal.
-KNIFE/JAWS/FILM/STRIP OVERSPEED: Velocidad superior a la permitida en modo manual → Controlar sensores de proximidad para overspeed (posición: 0,3mm de la leva). Verificar motor y drive.
-POWDER DOSER OUT OF LINE: Dosador habilitado pero fuera de línea → En manual: mover dosador a línea. En automático: controlar sistema de movimentación.
-POWDER DOSER HOMING TIMEOUT: Homing dosador superó tiempo máximo → Verificar drive, motor, transmisiones mecánicas y sensor de proximidad de homing.
-DOSER MOVEMENT TIMEOUT: Dosador no alcanzó posición en tiempo → Controlar sistema de movimiento del dosador.
-LIQUID DOSER HOMING TIMEOUT: Ídem dosador líquidos
-INFEED HOMING TIMEOUT: Homing nastro INFEED superó tiempo → Verificar drive, motor, transmisiones y sensor homing.
-PRINTER HOMING TIMEOUT: Homing carrito impresora superó tiempo → Verificar drive, motor, transmisiones y sensor homing.
+=== ALARMAS – MOVIMIENTO ===
+JAWS PROXIMITY DETECTION MISSING: Fotocélula no detectó marca 5 veces → material mal posicionado o fotocélula sucia
+REEL CENTERING LIMIT REACHED: Mover bobina manualmente desde panel. Verificar sensor de centraje.
+FILM UNWINDER SPEED TOO LOW: Controlar desbobinador y pasaje de material
+FILM BROKEN: Ballerino en posición más baja → controlar desbobinador y pasaje de material
+SACHET JAM ON EXIT BELT: Controlar bolsitas atascadas en cuchilla, deviadores o toboganes
+BAG LENGTH DIFFERENCE TOO HIGH: Fotocélula no alineada con marca de registro
+MARK DETECTION MISSING: Fotocélula sucia o material mal posicionado
+STRIP/KNIFE/JAWS MOVEMENT TIMEOUT: Movimiento demasiado lento → verificar motor y sensores
+POWDER DOSER OUT OF LINE: En manual mover dosador a línea. En automático controlar sistema.
+POWDER DOSER HOMING TIMEOUT: Verificar drive, motor, transmisiones y sensor de homing
+END OF PRODUCT (1,2,3,4): Agregar producto. Verificar sistema de carga.
+END OF REEL: Sustituir bobina
 
 === ALARMAS – TEMPERATURA ===
-LEFT/RIGHT ROLL TEMPERATURE: Sensor o calentador del rodillo con funcionamiento anómalo → Verificar sensor de temperatura y calentador
-LEFT/RIGHT JAWS TEMPERATURE: Ídem para mordazas
-TEMPERATURE OUT OF RANGE: Temperatura fuera del rango máximo → Esperar que ganasce y rulli alcancen temperatura configurada. Controlar set de temperaturas. Verificar termocuplas y resistencias.
-THERMOREGULATORS COMMUNICATION ERRORS: Termorreguladores no comunican con unidad de control → Verificar conexión entre termorreguladores y unidad de control
-LEFT/RIGHT ROLL/JAWS TEMPERATURE SENSOR: Problema en sistema de detección de temperatura → Verificar integridad del sensor y conexión. Verificar cables eléctricos desde sensor hasta tablero.
-PRODUCT TEMPERATURE: Temperatura del producto fuera del intervalo → Esperar que alcance temperatura configurada. Controlar valores configurados. Verificar sensor.
+TEMPERATURE OUT OF RANGE: Esperar que mordazas y rodillos alcancen temperatura configurada. Controlar termocuplas y resistencias.
+LEFT/RIGHT ROLL/JAWS TEMPERATURE: Verificar sensor de temperatura y calentador
+THERMOREGULATORS COMMUNICATION ERRORS: Verificar conexión entre termorreguladores y unidad de control
 
-=== ALARMAS – FUNCIONAMIENTO ===
-AIR LOW PRESSURE: Presión aire comprimido baja → Controlar manómetro en entrada de aire (debe indicar 6 bar). Verificar pérdidas por tubos sueltos o dañados.
-END OF REEL: Film de bobina terminado → Sustituir bobina. Controlar posición y conexiones eléctricas del sensor.
-MARK DETECTION MISSING: Fotocélula no detectó tacca 5 veces → Material mal posicionado o fotocélula sucia/lente cubierta. Consultar manual SICK.
-FILM BROKEN: Ballerino en posición más baja → Controlar svolgibobina y pasaje de material. Verificar ballerino y sensor lineal.
-SACHET JAM ON EXIT BELT: Bolsitas faltantes en cinta de salida → Controlar si hay bolsitas atascadas en cuchilla, deviadores o toboganes de salida.
-BAG LENGTH DIFFERENCE TOO HIGH: Longitud de bolsita muy diferente al valor configurado → Fotocélula no alineada con tacca (detecta marcas falsas). Controlar valor configurado de longitud de bolsita.
-FILM JOINT DETECTED: Fotocélula detectó giunzione en el film → Descartar bolsitas producidas con la giunzione.
-MARK OUT OF ALLOWED RANGE: Tacca muy diferente a la esperada → Fotocélula no alineada. Consultar manual SICK.
-ACTIVE ALARM: Hay uno o más alarmas activos → Controlar alarmas activos en página ALARMS del panel.
-PRINTER ALARM: Impresora en alarma → Verificar impresora y referirse a su manual.
-END OF PRODUCT (1,2,3,4): Sensor de nivel detecta nivel bajo → Agregar producto. Verificar sistema de carga.
+=== ALARMAS – TABLERO ===
+AIR LOW PRESSURE: Controlar manómetro (debe indicar 6 bar). Verificar pérdidas.
+ELECTRIC BOARD TEMPERATURE: Limpiar o sustituir filtros del aire acondicionado del tablero
+INVERTER ALARM: Consultar manual del inverter según código de alarma
+DRIVES POWER ALARM: Verificar interruptor automático y dispositivo
 
-=== ALARMAS – DOSADOR WT (tejido no tejido) ===
-WT1/WT2 TNT BROKEN: Bobina de TNT rota → Verificar estado del TNT, hacer giunzione en punto de ruptura si es posible.
-WT1/WT2 END OF TNT REEL: Bobina de TNT terminada → Sustituir por bobina nueva.
-TRACKING MISSING WT LINE (1..16): Falta pañuelo en línea indicada → Verificar que no haya pañuelos bloqueados. Controlar posición y pliegue de pañuelos en bolsitas; si son correctos, modificar fase de tracking; si no, verificar estación de corte del TNT.
-WT1/WT2 UNWINDER SPEED TOO LOW: Ballerino svolgibobina WT en posición más alta → Controlar svolgibobina WT. Verificar pasaje del TNT.
-WT CUT MOTOR / WT PULL MOTOR / PULLING BELTS MOTOR: Motor/drive en alarma → Verificar drive. Si persiste: BOATO PACK.
-WT1/WT2 JOINT DETECTED: Giunzione detectada en TNT → Descartar bolsitas producidas con la giunzione.
+=== MANTENIMIENTO ===
+DIARIO: Limpiar cintas/correas, guías del dosador y estación de sellado (mordazas y rodillos con cepillo de bronce)
+SEMANAL: Engrasar guías lineales del dosador, cut-off y astucciadora
+CADA 80-100 HS: Engrasar levas mecánicas de la astucciadora (máquina detenida)
+MENSUAL: Verificar cojinetes, lubricar engranajes internos, verificar juntas del dosador, controlar resortes de mordazas y rodillos, controlar filtros neumáticos
+CAMBIO DE PRODUCTO: Limpieza a fondo de todas las partes en contacto con el producto en el dosador
 
-=== ALARMAS – TABLERO ELÉCTRICO ===
-INVERTER ALARM: Inverter en alarma → Controlar inverters y referirse a su manual según código de alarma.
-ELECTRIC BOARD TEMPERATURE: Temperatura tablero superó umbral → Controlar filtros del aire acondicionador, limpiarlos o sustituirlos. Controlar configuración del sensor térmico (50°C).
-POWER SUPPLY PHASE SWAPPED: Fases de alimentación conectadas incorrectamente → Apagar máquina y conectar correctamente las fases.
-DRIVES POWER ALARM: Unidad de alimentación de motores en alarma → Verificar interruptor automático, reponerlo, controlar dispositivo.
-
-=== MANTENIMIENTO – FRECUENCIAS ===
-DIARIO:
-- Limpiar cintas/correas de todas las secciones (trapo húmedo + secado)
-- Limpiar guías lineales del dosador (retirar residuos de producto)
-- Limpiar estación de sellado (rulli y ganasce) con cepillo de bronce + paño seco
-
-SEMANAL:
-- Engrasar guía lineal movimentación dosador
-- Engrasar guía lineal movimentación cut-off
-- Engrasar guía lineal astucciadora
-
-CADA 80-100 HORAS (máquina detenida):
-- Engrasar levas mecánicas de la astucciadora
-
-MENSUAL:
-- Verificar estado de cojinetes en todos los grupos (sustituir si es necesario)
-- Lubricación de engranajes de la mecánica interna (una vez al mes exacto)
-- Verificar juntas del dosador (coclea de carga, transporte, dosificación)
-- Verificar o-rings del svolgibobina (giunzione film)
-- Verificar lubricación superficies de contacto de cuchillas (pasta Molykote BR2)
-- Controlar resortes de compresión de rulli y ganasce (no deformados)
-- Controlar filtros del sistema neumático
-
-EN CADA CAMBIO DE PRODUCTO:
-- Limpieza a fondo de todas las partes en contacto con el producto en el dosador
-
-=== MANTENIMIENTO – NOTAS CLAVE ===
-- Rulli y ganasce: presión excesiva = deterioro prematuro. Actuar sobre el grano con cuidado.
-- ⚠️ NO tocar cuchillas del easy tear notch — están instaladas con máxima precisión.
-- ⚠️ NO usar aire comprimido para limpiar cuchillas — aspirar los depósitos de polvo.
-- Cuchillas: lubricar superficies de contacto lateral con pasta Molykote BR2.
-- Ventosas astucciadora: controlar periódicamente, sustituir si están desgastadas.
-- Correas: verificar tensionado correcto para evitar desgaste prematuro.
+NOTAS:
+- Presión excesiva en mordazas/rodillos = deterioro prematuro
+- NO tocar cuchillas easy tear notch
+- NO usar aire comprimido para limpiar cuchillas — aspirar
+- Lubricar superficies laterales de cuchillas con pasta Molykote BR2
 `;
 
 let history = [];
@@ -588,10 +446,7 @@ function autoResize(el) {
 }
 
 function handleKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    sendMessage();
-  }
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 }
 
 function sendChip(el) {
@@ -604,20 +459,12 @@ function appendMsg(role, html, isHTML = false) {
   const chat = document.getElementById('chat');
   const div = document.createElement('div');
   div.className = `msg ${role}`;
-
   const avatar = document.createElement('div');
   avatar.className = 'avatar';
   avatar.textContent = role === 'bot' ? 'BP' : 'OP';
-
   const bubble = document.createElement('div');
   bubble.className = 'bubble';
-
-  if (isHTML) {
-    bubble.innerHTML = html;
-  } else {
-    bubble.textContent = html;
-  }
-
+  if (isHTML) { bubble.innerHTML = html; } else { bubble.textContent = html; }
   div.appendChild(avatar);
   div.appendChild(bubble);
   chat.appendChild(div);
@@ -630,15 +477,12 @@ function showTyping() {
   const div = document.createElement('div');
   div.className = 'msg bot';
   div.id = 'typing-msg';
-
   const avatar = document.createElement('div');
   avatar.className = 'avatar';
   avatar.textContent = 'BP';
-
   const bubble = document.createElement('div');
   bubble.className = 'bubble';
   bubble.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
-
   div.appendChild(avatar);
   div.appendChild(bubble);
   chat.appendChild(div);
@@ -654,51 +498,31 @@ function formatResponse(text) {
   let html = text
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.*?)\*/g, '<em>$1</em>');
-
   const lines = html.split('\n');
   let result = '';
   let inList = false;
   let listType = null;
-
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
     if (!line) {
-      if (inList) {
-        result += listType === 'ul' ? '</ul>' : '</ol>';
-        inList = false; listType = null;
-      }
-      result += '<br>';
-      continue;
+      if (inList) { result += listType === 'ul' ? '</ul>' : '</ol>'; inList = false; listType = null; }
+      result += '<br>'; continue;
     }
-
     const numMatch = line.match(/^(\d+)\.\s(.+)/);
     const bulletMatch = line.match(/^[-•]\s(.+)/);
-
     if (numMatch) {
-      if (!inList || listType !== 'ol') {
-        if (inList) result += '</ul>';
-        result += '<ol>'; inList = true; listType = 'ol';
-      }
+      if (!inList || listType !== 'ol') { if (inList) result += '</ul>'; result += '<ol>'; inList = true; listType = 'ol'; }
       result += `<li>${numMatch[2]}</li>`;
     } else if (bulletMatch) {
-      if (!inList || listType !== 'ul') {
-        if (inList) result += '</ol>';
-        result += '<ul>'; inList = true; listType = 'ul';
-      }
+      if (!inList || listType !== 'ul') { if (inList) result += '</ol>'; result += '<ul>'; inList = true; listType = 'ul'; }
       result += `<li>${bulletMatch[1]}</li>`;
     } else {
-      if (inList) {
-        result += listType === 'ul' ? '</ul>' : '</ol>';
-        inList = false; listType = null;
-      }
+      if (inList) { result += listType === 'ul' ? '</ul>' : '</ol>'; inList = false; listType = null; }
       if (line.match(/^[A-ZÁÉÍÓÚ][^.!?]*:$/) && line.length < 60) {
         result += `<div class="section-label">${line}</div>`;
-      } else {
-        result += line + ' ';
-      }
+      } else { result += line + ' '; }
     }
   }
-
   if (inList) result += listType === 'ul' ? '</ul>' : '</ol>';
   return result.trim();
 }
@@ -707,42 +531,29 @@ async function sendMessage() {
   const input = document.getElementById('userInput');
   const text = input.value.trim();
   if (!text || isLoading) return;
-
   input.value = '';
   input.style.height = 'auto';
   isLoading = true;
   document.getElementById('sendBtn').disabled = true;
-
   appendMsg('user', text);
   history.push({ role: 'user', content: text });
-
   showTyping();
-
   try {
     const response = await fetch('https://boato-ai-proxy.sebadegraf.workers.dev', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        system: MANUAL_CONTEXT,
-        messages: history,
-        max_tokens: 1000,
-      })
+      body: JSON.stringify({ system: MANUAL_CONTEXT, messages: history, max_tokens: 1000 })
     });
-
     const data = await response.json();
     const reply = data.content?.[0]?.text || 'No pude obtener respuesta. Intentá de nuevo.';
-
     history.push({ role: 'assistant', content: reply });
-
     removeTyping();
     appendMsg('bot', formatResponse(reply), true);
-
   } catch (err) {
     removeTyping();
     appendMsg('bot', '⚠️ Error de conexión. Verificá la red e intentá de nuevo.', true);
     console.error(err);
   }
-
   isLoading = false;
   document.getElementById('sendBtn').disabled = false;
   input.focus();
