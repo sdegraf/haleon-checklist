@@ -547,7 +547,7 @@ async function sendMessage() {
     const response = await fetch('https://boato-ai-proxy.sebadegraf.workers.dev', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ system: MANUAL_CONTEXT, messages: history, max_tokens: 1000 })
+      body: JSON.stringify({ system: MANUAL_CONTEXT, messages: history.slice(-4), max_tokens: 1000 })
     });
     const data = await response.json();
     const reply = data.content?.[0]?.text || 'No pude obtener respuesta. Intentá de nuevo.';
